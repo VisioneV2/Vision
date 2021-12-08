@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 
 namespace Altv_Roleplay.Handler
 {
@@ -36,7 +37,7 @@ namespace Altv_Roleplay.Handler
             player.Rotation = new Rotation(0, 0, (float)3.1168559);
         }
 
-     
+
 
         [Command("setveh")]
         public void setVeh(ClassicPlayer player, string name, string plate)
@@ -64,11 +65,11 @@ namespace Altv_Roleplay.Handler
                 Alt.Log($"{e}");
             }
         }
-      [CommandEvent(CommandEventType.CommandNotFound)]
-      public void OnCommandNotFound(Player player, string cmd)
+        [CommandEvent(CommandEventType.CommandNotFound)]
+        public void OnCommandNotFound(Player player, string cmd)
         {
             HUDHandler.SendNotification(player, 2, 5000, " command nicht gefunden ");
-           
+
         }
         [Command("jailtime")]
         public void jailTimeCmd(ClassicPlayer player)
@@ -331,7 +332,7 @@ namespace Altv_Roleplay.Handler
             CharactersInventory.AddCharacterItem((int)charId, "Bargeld", itemAmount, "inventory");
             HUDHandler.SendNotification(player, 2, 5000, $"{itemAmount}$ erhalten (Bargeld).");
         }
-  
+
         [Command("players")]
         public void PlayerCMD(IPlayer player)
         {
@@ -351,6 +352,41 @@ namespace Altv_Roleplay.Handler
                 Alt.Log($"{e}");
             }
         }
+     
+        [Command("quitffa")]
+        public static void CMD_QFFA(IPlayer player)
+        {
+            if (player.HasData("FFA"))
+            {
+                int charId = (int)player.GetCharacterMetaId();
+                if (charId <= 0) return;
+                HUDHandler.SendNotification(player, 4, 5000, "ffa verlassen");
+                player.Dimension = 0;
+                Characters.SetCharacterWeapon(player, "PrimaryWeapon", "None");
+                Characters.SetCharacterWeapon(player, "PrimaryAmmo", 0);
+                Characters.SetCharacterWeapon(player, "SecondaryWeapon2", "None");
+                Characters.SetCharacterWeapon(player, "SecondaryWeapon", "None");
+                Characters.SetCharacterWeapon(player, "SecondaryAmmo2", 0);
+                Characters.SetCharacterWeapon(player, "SecondaryAmmo", 0);
+                Characters.SetCharacterWeapon(player, "FistWeapon", "None");
+                Characters.SetCharacterWeapon(player, "FistWeaponAmmo", 0);
+                Characters.SetCharacterPhoneEquipped(charId, false);
+                player.RemoveAllWeaponsAsync();
+                player.Spawn(new Position(758.3077f, -816.26373f, 26.499634f), 0);
+                player.Position = new Position(758.3077f, -816.26373f, 26.499634f);
+                player.DeleteData("FFA");
+                return;
+
+            }
+            else
+            {
+                HUDHandler.SendNotification(player, 4, 5000, "Du bist nicht in ffa");
+                return;
+            }
+           
+
+        }
+      
 
         [Command("ReloadDB")]
         public static void CMD_RELOAD(IPlayer player, int ID)

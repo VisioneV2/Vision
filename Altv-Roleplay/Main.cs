@@ -207,7 +207,8 @@ namespace Altv_Roleplay
             //Alt.OnClient<IPlayer, string, string, string>("Server:Tablet:NotesAppNewNote", TabletHandler.NotesAppNewNote);
             //Alt.OnClient<IPlayer, int>("Server:Tablet:NotesAppDeleteNote", TabletHandler.NotesAppDeleteNote);
             //Alt.OnClient<IPlayer, string, int, string>("Server:Tablet:VehicleStoreBuyVehicle", TabletHandler.VehicleStoreBuyVehicle);
-            //Alt.OnClient<IPlayer, string, int>("Server:Tablet:CompanyAppInviteNewMember", TabletHandler.CompanyAppInviteNewMember);
+            //Alt.OnClient<IPlayer, string, int>("Server:Tablet:CompanyApp
+            //teNewMember", TabletHandler.CompanyAppInviteNewMember);
             //Alt.OnClient<IPlayer>("Server:Tablet:CompanyAppLeaveCompany", TabletHandler.CompanyAppLeaveCompany);
             //Alt.OnClient<IPlayer, int, int>("Server:Tablet:CompanyAppRankAction", TabletHandler.CompanyAppRankAction);
             //Alt.OnClient<IPlayer, string, int, int>("Server:FactionBank:DepositMoney", BankHandler.DepositFactionMoney);

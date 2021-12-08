@@ -8,13 +8,18 @@ using Altv_Roleplay.Model;
 using Altv_Roleplay.models;
 using Altv_Roleplay.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Altv_Roleplay.Handler
 {
     class KeyHandler : IScript
+
     {
+
+
         [AsyncClientEvent("Server:KeyHandler:PressE")]
         public async Task PressE(IPlayer player)
         {
@@ -347,7 +352,7 @@ namespace Altv_Roleplay.Handler
                 if (player.Position.IsInRange(Constants.Positions.Schwarzwasch, 5f))
                 {
                     if (player.HasPlayerHandcuffs() || player.HasPlayerRopeCuffs()) { HUDHandler.SendNotification(player, 3, 5000, "Wie willst du das mit Handschellen/Fesseln machen?"); return; }
-                    RobberyHandler.washmoney(player);
+                    _ = RobberyHandler.washmoney(player);
                     return;
                 }
 
@@ -469,7 +474,7 @@ namespace Altv_Roleplay.Handler
                         }
                         else
                         {
-                            Characters.SetCharacterCorrectClothes(player);
+                            _ = Characters.SetCharacterCorrectClothes(player);
                             HUDHandler.SendNotification(player, 4, 2500, "Du hast deine Arbeitsklamotten ausgezogen.");
                             player.DeleteData("HasPDClothesOn");
                         }
@@ -480,6 +485,92 @@ namespace Altv_Roleplay.Handler
                     }
                     return;
                 }
+          
+
+                if (player.Position.IsInRange(Constants.Positions.FFA, 2.5f) && !player.IsInVehicle )
+                {
+                   if (player.HasData("FFA"))
+                    {
+                        HUDHandler.SendNotification(player, 4, 5000, "Du bist bereits in ffa"); return;
+                    }
+                     
+
+                    HUDHandler.SendNotification(player, 4, 5000, "FFA BETRETEN");
+
+
+                    player.RemoveAllWeaponsAsync();
+                    Characters.SetCharacterWeapon(player, "PrimaryWeapon", "None");
+                    Characters.SetCharacterWeapon(player, "PrimaryAmmo", 0);
+                    Characters.SetCharacterWeapon(player, "SecondaryWeapon2", "None");
+                    Characters.SetCharacterWeapon(player, "SecondaryWeapon", "None");
+                    Characters.SetCharacterWeapon(player, "SecondaryAmmo2", 0);
+                    Characters.SetCharacterWeapon(player, "SecondaryAmmo", 0);
+                    Characters.SetCharacterWeapon(player, "FistWeapon", "None");
+                    Characters.SetCharacterWeapon(player, "FistWeaponAmmo", 0);
+                    Characters.SetCharacterPhoneEquipped(charId, false);
+                  
+                    player.Dimension = 3;
+                    player.SetData("FFA", true);
+                    int rnd = new Random().Next(1, 192);
+                    
+                    if (rnd >= 3 && rnd <= 24)
+                    {
+                        player.Spawn(new Position(258.52747f, -875.9077f, 29.212402f), 0);
+                        player.Position = new Position(258.52747f, -875.9077f, 29.212402f);
+                    }
+                    else if (rnd >= 24 && rnd <= 48)
+                    {
+                        player.Spawn(new Position(218.42638f, -937.5165f, 24.140625f), 0);
+                        player.Position = new Position(218.42638f, -937.5165f, 24.140625f);
+                    }
+                    else if (rnd >= 48 && rnd <= 72)
+                    {
+                        player.Spawn(new Position(204.03957f, -993.7187f, 30.088623f), 0);
+                        player.Position = new Position(204.03957f, -993.7187f, 30.088623f);
+                    }
+                    else if (rnd >= 72 && rnd <= 96)
+                    {
+                        player.Spawn(new Position(207.53406f, -994.66815f, 29.279907f), 0);
+                        player.Position = new Position(207.53406f, -994.66815f, 29.279907f);
+                    }
+                    else if (rnd >= 96 && rnd <= 120)
+                    {
+                        player.Spawn(new Position(160.68132f, -999.0857f, 29.330444f), 0);
+                        player.Position = new Position(160.68132f, -999.0857f, 29.330444f);
+                    }
+                    else if (rnd >= 120 && rnd <= 144)
+                    {
+                        player.Spawn(new Position(143.92088f, -966.2769f, 29.549438f), 0);
+                        player.Position = new Position(143.92088f, -966.2769f, 29.549438f);
+                    }
+                    else if (rnd >= 144 && rnd <= 168)
+                    {
+                        player.Spawn(new Position(158.01758f, -914.0967f, 30.156006f), 0);
+                        player.Position = new Position(158.01758f, -914.0967f, 30.156006f);
+                    }
+                    else if (rnd >= 144 && rnd <= 168)
+                    {
+                        player.Spawn(new Position(158.01758f, -914.0967f, 30.156006f), 0);
+                        player.Position = new Position(158.01758f, -914.0967f, 30.156006f);
+                    }
+                    else if (rnd >= 168 && rnd <= 192)
+                    {
+                        player.Spawn(new Position(184.8923f, -853.95166f, 31.150146f), 0);
+                        player.Position = new Position(184.8923f, -853.95166f, 31.150146f);
+                    }
+
+                    Task.Delay(100);
+                    player.GiveWeapon(AltV.Net.Enums.WeaponModel.HeavyPistol, 9999, true);
+                    player.GiveWeapon(AltV.Net.Enums.WeaponModel.AssaultRifle, 9999, true);
+                    player.GiveWeapon(AltV.Net.Enums.WeaponModel.SpecialCarbine, 9999, true);
+                    player.GiveWeapon(AltV.Net.Enums.WeaponModel.BullpupRifle, 9999, true);
+                    player.GiveWeapon(AltV.Net.Enums.WeaponModel.GusenbergSweeper, 9999, true);
+                    player.GiveWeapon(AltV.Net.Enums.WeaponModel.AdvancedRifle, 9999, true);
+                 //   Pla(0x5a96ba4, 9999, true);
+                    return;
+                }
+
+            
 
                 if (player.Position.IsInRange(Constants.Positions.Clothes_Fib, 2.5f) && !player.IsInVehicle)
                 {
@@ -504,10 +595,10 @@ namespace Altv_Roleplay.Handler
                             HUDHandler.SendNotification(player, 2, 2500, "Du hast deine Arbeitsklamotten angezogen.");
                             player.SetData("HasFIBClothesOn", true);
                             Characters.SetCharacterArmor(charId, 100);
-                        }
-                        else
-                        {
-                            Characters.SetCharacterCorrectClothes(player);
+                          } 
+                       else
+                           {
+                            _ = Characters.SetCharacterCorrectClothes(player);
                             HUDHandler.SendNotification(player, 4, 2500, "Du hast deine Arbeitsklamotten ausgezogen.");
                             player.DeleteData("HasFIBClothesOn");
                         }
@@ -543,7 +634,7 @@ namespace Altv_Roleplay.Handler
                         }
                         else
                         {
-                            Characters.SetCharacterCorrectClothes(player);
+                            _ = Characters.SetCharacterCorrectClothes(player);
                             HUDHandler.SendNotification(player, 2, 2500, "Du hast deine Arbeitsklamotten ausgezogen.");
                             player.DeleteData("HasMedicClothesOn");
                         }
@@ -599,7 +690,7 @@ namespace Altv_Roleplay.Handler
                         else
                         {
                             player.DeleteData("HasMechanicClothesOn");
-                            Characters.SetCharacterCorrectClothes(player);
+                            _ = Characters.SetCharacterCorrectClothes(player);
                             HUDHandler.SendNotification(player, 2, 2500, "Du hast deine Arbeitsklamotten ausgezogen.");
                         }
                     }

@@ -76,6 +76,13 @@ namespace Altv_Roleplay.Utils
             public static readonly Position Clothes_ACLS = new Position((float)-340.04834, (float)-162, (float)44.579468);
             public static readonly Position Clothes_VUC = new Position((float)104.874725, (float)-1303.556, (float)28.5);
             public static readonly Position Tune_Mode = new Position((float)-352.85275, (float)-93.77143, (float)39.002197);
+
+            //FFA
+            public static readonly Position FFA = new Position((float)758.3077, (float)-816.26373, (float)26.499634);
+            //FFA
+            //S
+
+
             //Farming
             public static readonly Position ProcessTest = new Position((float)-252.05, (float)-971.736, (float)31.21);
             public static readonly Position Schwarzwasch = new Position((float)-170.611, (float)1553.7362, (float)-12.372925);

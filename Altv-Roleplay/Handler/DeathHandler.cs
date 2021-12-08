@@ -7,7 +7,9 @@ using Altv_Roleplay.Factories;
 using Altv_Roleplay.Model;
 using Altv_Roleplay.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 
@@ -15,6 +17,21 @@ namespace Altv_Roleplay.Handler
 {
     class DeathHandler : IScript
     {
+       
+        public static Vector3 getRandomSpawnpoint(List<Vector3> list)
+        {
+            var random = new Random();
+            int index = random.Next(list.Count);
+            return list[index];
+        }
+
+        public static List<Vector3> StabCityPoints = new List<Vector3> {
+            new Vector3((float)113.4925, (float)3731.04, (float)38.64072),
+            new Vector3((float)50.17555, (float)3634.005, (float)38.58967),
+            new Vector3((float)4.314305, (float)3698.297, (float)38.44342),
+            new Vector3((float)81.36716, (float)3719.341, (float)38.6500911)
+        };
+
         [AsyncScriptEvent(ScriptEventType.PlayerDead)]
         public async Task OnPlayerDeath(ClassicPlayer player, IEntity killer, uint weapon)
         {
@@ -23,6 +40,7 @@ namespace Altv_Roleplay.Handler
                 if (player == null || !player.Exists) return;
                 int charId = (int)player.GetCharacterMetaId();
                 if (charId <= 0) return;
+              
                 if (Characters.IsCharacterUnconscious(charId)) return;
                 if (Characters.IsCharacterInJail(charId))
                 {
@@ -30,7 +48,64 @@ namespace Altv_Roleplay.Handler
                     player.Position = new Position(1691.4594f, 2565.7056f, 45.556763f);
                     return;
                 }
-              
+                if (player.HasData("FFA"))
+                {
+                    await Task.Delay(5000);
+                    DeathHandler.revive(player);
+                    player.Health = 200; player.Health = 200;
+                    int rnd = new Random().Next(1, 192);
+                    if (rnd >= 3 && rnd <= 24)
+                    {
+                        player.Spawn(new Position(258.52747f, -875.9077f, 29.212402f), 0);
+                        player.Position = new Position(258.52747f, -875.9077f, 29.212402f);
+                    }
+                    else if (rnd >= 24 && rnd <= 48)
+                    {
+                        player.Spawn(new Position(218.42638f, -937.5165f, 24.140625f), 0);
+                        player.Position = new Position(218.42638f, -937.5165f, 24.140625f);
+                    }
+                    else if (rnd >= 48 && rnd <= 72)
+                    {
+                        player.Spawn(new Position(204.03957f, -993.7187f, 30.088623f), 0);
+                        player.Position = new Position(204.03957f, -993.7187f, 30.088623f);
+                    }
+                    else if (rnd >= 72 && rnd <= 96)
+                    {
+                        player.Spawn(new Position(207.53406f, -994.66815f, 29.279907f), 0);
+                        player.Position = new Position(207.53406f, -994.66815f, 29.279907f);
+                    }
+                    else if (rnd >= 96 && rnd <= 120)
+                    {
+                        player.Spawn(new Position(160.68132f, -999.0857f, 29.330444f), 0);
+                        player.Position = new Position(160.68132f, -999.0857f, 29.330444f);
+                    }
+                    else if (rnd >= 120 && rnd <= 144)
+                    {
+                        player.Spawn(new Position(143.92088f, -966.2769f, 29.549438f), 0);
+                        player.Position = new Position(143.92088f, -966.2769f, 29.549438f);
+                    }
+                    else if (rnd >= 144 && rnd <= 168)
+                    {
+                        player.Spawn(new Position(158.01758f, -914.0967f, 30.156006f), 0);
+                        player.Position = new Position(158.01758f, -914.0967f, 30.156006f);
+                    }
+                    else if (rnd >= 144 && rnd <= 168)
+                    {
+                        player.Spawn(new Position(158.01758f, -914.0967f, 30.156006f), 0);
+                        player.Position = new Position(158.01758f, -914.0967f, 30.156006f);
+                    }
+                    else if (rnd >= 168 && rnd <= 192)
+                    {
+                        player.Spawn(new Position(184.8923f, -853.95166f, 31.150146f), 0);
+                        player.Position = new Position(184.8923f, -853.95166f, 31.150146f);
+                    }
+
+
+
+                    return;
+                }
+
+                //| sp2 | Saved Coordenates: Position(x: 218,42638, y: -937,5165, z: 24,140625) Saved Rotation: Rotation(roll: 0, pitch: 0, yaw: 2,572643)
 
                 openDeathscreen(player);
                 Characters.SetCharacterUnconscious(charId, true, 10); // Von 15 auf 10 geändert.
@@ -40,6 +115,17 @@ namespace Altv_Roleplay.Handler
                 player.EmitLocked("Client:HUD:UpdateDesire", Characters.GetCharacterArmor(charId), Characters.GetCharacterHealth(charId), Characters.GetCharacterHunger(charId), Characters.GetCharacterThirst(charId)); //HUD updaten
 
                 Alt.Emit("Server:Smartphone:leaveRadioFrequence", player);
+
+                if (player.HasData("FFA"))
+                {
+                    await Task.Delay(5000);
+                    DeathHandler.revive(player);
+                    Alt.Emit("SaltyChat:SetPlayerAlive", player, true);
+                    player.EmitLocked("Client:Deathscreen:closeCEF");
+                    player.Health = 200;
+                  
+                    return;
+                }
 
                 ClassicPlayer killerPlayer = (ClassicPlayer)killer;
                 if (killerPlayer == null || !killerPlayer.Exists)
@@ -109,6 +195,8 @@ namespace Altv_Roleplay.Handler
                             HUDHandler.SendNotification(p, 4, 2500, $"{Characters.GetCharacterName(killerPlayer.CharacterId)} wurde gebannt: Waffenhack[2] - {weaponModel}");
                         }
                         return;
+
+               
                     }
                 }
             }
