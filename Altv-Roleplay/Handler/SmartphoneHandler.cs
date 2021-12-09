@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 //D
 namespace Altv_Roleplay.Handler
@@ -162,8 +163,8 @@ namespace Altv_Roleplay.Handler
             }
         }
 
-        [AsyncScriptEvent(ScriptEventType.PlayerDisconnect)]
-        public void PlayerDisconnect(ClassicPlayer player)
+         [AsyncScriptEvent(ScriptEventType.PlayerDisconnect)]
+        public async Task PlayerDisconnect(ClassicPlayer player, string reason)
         {
             try
             {
