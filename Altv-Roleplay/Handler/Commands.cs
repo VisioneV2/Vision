@@ -15,7 +15,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
 
 namespace Altv_Roleplay.Handler
 {
@@ -376,106 +375,110 @@ namespace Altv_Roleplay.Handler
                 player.Position = new Position(758.3077f, -816.26373f, 26.499634f);
                 player.DeleteData("FFA");
                 return;
-
             }
             else
             {
                 HUDHandler.SendNotification(player, 4, 5000, "Du bist nicht in ffa");
                 return;
             }
-           
-
         }
-      
 
         [Command("ReloadDB")]
         public static void CMD_RELOAD(IPlayer player, int ID)
         {
             if (player == null || !player.Exists) return;
-            if (player.AdminLevel() < 9) { HUDHandler.SendNotification(player, 4, 5000, "Keine Rechte."); return; }
             if (!player.HasData("isAduty")) { HUDHandler.SendNotification(player, 4, 5000, "Nicht im (/am) Admindienst."); return; }
+            if (player.AdminLevel() < 9) { HUDHandler.SendNotification(player, 4, 5000, "Keine Rechte."); return; }
+
             ulong charId = player.GetCharacterMetaId();
             if (charId <= 0) return;
+            if (ID <= 0 || ID >= 16) { HUDHandler.SendNotification(player, 4, 5000, "Benutze /ReloadDB <id> 1 - 14"); return; } //Diff -1 |{value}| +1
 
-            // 3 = GARAGE
-            if (ID == 3)
+            switch (ID)
             {
-                DatabaseHandler.LoadAllGarages();
-                DatabaseHandler.LoadAllGarageSlots();
-                HUDHandler.SendNotification(player, 2, 5000, "Garagen neugeladen");
-            }
-            // 4 = VEHICLESHOP
-            if (ID == 4)
-            {
-                DatabaseHandler.LoadAllVehicleShops();
-                DatabaseHandler.LoadAllVehicleShopItems();
-                HUDHandler.SendNotification(player, 2, 5000, "Fahrzeugshops neugeladen!");
-            }
-            // 5 = SHOPS/Dealer
-            if (ID == 5)
-            {
-                DatabaseHandler.LoadAllServerShops();
-                DatabaseHandler.LoadAllServerShopItems();
-                HUDHandler.SendNotification(player, 2, 5000, "Dealer & Shops Neugeladen!");
-            }
-            // 6 = Clothesshops
-            if (ID == 6)
-            {
-                DatabaseHandler.LoadAllClothesShops();
-                HUDHandler.SendNotification(player, 2, 5000, "Kleidungsshops neugeladen");
-            }
-            // 7 = Tankstellen
-            if (ID == 7)
-            {
-                DatabaseHandler.LoadAllServerFuelStations();
-                DatabaseHandler.LoadALlServerFuelStationSpots();
-                HUDHandler.SendNotification(player, 2, 5000, "Tankstellen neugeladen!");
-            }
-            // 98 = Teleporter
-            if (ID == 98)
-            {
-                DatabaseHandler.LoadAllServerTeleports();
-                HUDHandler.SendNotification(player, 2, 5000, "Teleporter Neugeladen!");
-            }
-
-            // 99 = Companys
-            if (ID == 99)
-            {
-                DatabaseHandler.LoadAllServerCompanys();
-                DatabaseHandler.LoadAllServerCompanyMember();
-                HUDHandler.SendNotification(player, 2, 5000, "Unternehmen Neugeladen!");
-
-            }
-            // 101 = Faction
-            if (ID == 101)
-            {
-                DatabaseHandler.LoadAllServerFactions();
-                DatabaseHandler.LoadAllServerFactionRanks();
-                DatabaseHandler.LoadAllServerFactionMembers();
-                HUDHandler.SendNotification(player, 2, 5000, "Factions Neugeladen!");
-
-            }
-            // 102 = Türen neugeladen
-            if (ID == 102)
-            {
-                DatabaseHandler.LoadAllServerDoors();
-                HUDHandler.SendNotification(player, 2, 5000, "Alle Türen wurden Neugeladen!");
-
-            }
-            // 103 = Lizenzen Neuladen
-            if (ID == 103)
-            {
-                DatabaseHandler.LoadAllCharacterLicenses();
-                HUDHandler.SendNotification(player, 2, 5000, "Lizenzen Neu Geladen!");
-
-            }
-            // 104 = Farming
-            if (ID == 104)
-            {
-                DatabaseHandler.LoadAllServerFarmingProducers();
-                DatabaseHandler.LoadAllServerFarmingSpots();
-                HUDHandler.SendNotification(player, 2, 5000, "Farming Neugeladen!");
-
+                case 1: // Accounts - Funktioniert Nicht korrekt!
+                    DatabaseHandler.LoadAllPlayers();
+                    HUDHandler.SendNotification(player, 2, 5000, "Accounts neugeladen!");
+                    Alt.Log("ReloadDB 1 Called");
+                    break;
+                case 2: // Characters - Funktioniert Nicht korrekt!
+                    DatabaseHandler.LoadAllPlayerCharacters();
+                    HUDHandler.SendNotification(player, 2, 5000, "Characters neugeladen!");
+                    Alt.Log("ReloadDB 2 Called");
+                    break;
+                case 3: // Garagen
+                    DatabaseHandler.LoadAllGarages();
+                    DatabaseHandler.LoadAllGarageSlots();
+                    HUDHandler.SendNotification(player, 2, 5000, "Garagen neugeladen");
+                    Alt.Log("ReloadDB 3 Called");
+                    break;
+                case 4: // Vehicle Shop
+                    DatabaseHandler.LoadAllVehicleShops();
+                    DatabaseHandler.LoadAllVehicleShopItems();
+                    HUDHandler.SendNotification(player, 2, 5000, "Fahrzeugshops neugeladen!");
+                    Alt.Log("ReloadDB 4 Called");
+                    break;
+                case 5: // Shops - Dealer
+                    DatabaseHandler.LoadAllServerShops();
+                    DatabaseHandler.LoadAllServerShopItems();
+                    HUDHandler.SendNotification(player, 2, 5000, "Dealer & Shops Neugeladen!");
+                    Alt.Log("ReloadDB 5 Called");
+                    break;
+                case 6: // Klamotten Shops
+                    DatabaseHandler.LoadAllClothesShops();
+                    HUDHandler.SendNotification(player, 2, 5000, "Kleidungsshops neugeladen");
+                    Alt.Log("ReloadDB 6 Called");
+                    break;
+                case 7: // Tankstellen
+                    DatabaseHandler.LoadAllServerFuelStations();
+                    DatabaseHandler.LoadALlServerFuelStationSpots();
+                    HUDHandler.SendNotification(player, 2, 5000, "Tankstellen neugeladen!");
+                    Alt.Log("ReloadDB 7 Called");
+                    break;
+                case 8: // Teleporter
+                    DatabaseHandler.LoadAllServerTeleports();
+                    HUDHandler.SendNotification(player, 2, 5000, "Teleporter Neugeladen!");
+                    Alt.Log("ReloadDB 8 Called");
+                    break;
+                case 9: // Companys
+                    DatabaseHandler.LoadAllServerCompanys();
+                    DatabaseHandler.LoadAllServerCompanyMember();
+                    HUDHandler.SendNotification(player, 2, 5000, "Unternehmen Neugeladen!");
+                    Alt.Log("ReloadDB 9 Called");
+                    break;
+                case 10: // Faction
+                    DatabaseHandler.LoadAllServerFactions();
+                    DatabaseHandler.LoadAllServerFactionRanks();
+                    DatabaseHandler.LoadAllServerFactionMembers();
+                    HUDHandler.SendNotification(player, 2, 5000, "Factions Neugeladen!");
+                    Alt.Log("ReloadDB 10 Called");
+                    break;
+                case 11: // Türen
+                    DatabaseHandler.LoadAllServerDoors();
+                    HUDHandler.SendNotification(player, 2, 5000, "Alle Türen wurden Neugeladen!");
+                    Alt.Log("ReloadDB 11 Called");
+                    break;
+                case 12: // Lizenzen
+                    DatabaseHandler.LoadAllCharacterLicenses();
+                    HUDHandler.SendNotification(player, 2, 5000, "Lizenzen Neu Geladen!");
+                    Alt.Log("ReloadDB 12 Called");
+                    break;
+                case 13: // Farming 
+                    DatabaseHandler.LoadAllServerFarmingProducers();
+                    DatabaseHandler.LoadAllServerFarmingSpots();
+                    HUDHandler.SendNotification(player, 2, 5000, "Farming Neugeladen!");
+                    Alt.Log("ReloadDB 13 Called");
+                    break;
+                case 14: // Bankautomaten
+                    DatabaseHandler.LoadAllServerATMs();
+                    HUDHandler.SendNotification(player, 2, 5000, "ATM's neu geladen!");
+                    Alt.Log("ReloadDB 14 Called");
+                    break;
+                case 15: // Häuser Neuladen
+                    DatabaseHandler.LoadAllServerHouses();
+                    HUDHandler.SendNotification(player, 2, 5000, "Häuser neu geladen!");
+                    Alt.Log("ReloadDB 15 Called");
+                    break;
             }
         }
 
@@ -1192,7 +1195,7 @@ namespace Altv_Roleplay.Handler
                         componentColor = 11;
                         break;
                     case 9: // Entwickler
-                        componentColor = 9;
+                        componentColor = 7;
                         break;
                     case 10: // PL
                         componentColor = 2;
