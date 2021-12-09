@@ -17,20 +17,7 @@ namespace Altv_Roleplay.Handler
 {
     class DeathHandler : IScript
     {
-       
-        public static Vector3 getRandomSpawnpoint(List<Vector3> list)
-        {
-            var random = new Random();
-            int index = random.Next(list.Count);
-            return list[index];
-        }
 
-        public static List<Vector3> StabCityPoints = new List<Vector3> {
-            new Vector3((float)113.4925, (float)3731.04, (float)38.64072),
-            new Vector3((float)50.17555, (float)3634.005, (float)38.58967),
-            new Vector3((float)4.314305, (float)3698.297, (float)38.44342),
-            new Vector3((float)81.36716, (float)3719.341, (float)38.6500911)
-        };
 
         [AsyncScriptEvent(ScriptEventType.PlayerDead)]
         public async Task OnPlayerDeath(ClassicPlayer player, IEntity killer, uint weapon)
@@ -40,7 +27,7 @@ namespace Altv_Roleplay.Handler
                 if (player == null || !player.Exists) return;
                 int charId = (int)player.GetCharacterMetaId();
                 if (charId <= 0) return;
-              
+
                 if (Characters.IsCharacterUnconscious(charId)) return;
                 if (Characters.IsCharacterInJail(charId))
                 {
@@ -50,9 +37,10 @@ namespace Altv_Roleplay.Handler
                 }
                 if (player.HasData("FFA"))
                 {
+                    ClassicPlayer killerPlayerx = (ClassicPlayer)killer;
+                        killerPlayerx.Armor = 100;
+                    killerPlayerx.Health = 200;
                     await Task.Delay(5000);
-                    DeathHandler.revive(player);
-                    player.Health = 200; player.Health = 200;
                     int rnd = new Random().Next(1, 192);
                     if (rnd >= 3 && rnd <= 24)
                     {
@@ -100,9 +88,10 @@ namespace Altv_Roleplay.Handler
                         player.Position = new Position(184.8923f, -853.95166f, 31.150146f);
                     }
 
-
-
+                    player.Health = 200;
+                    player.Armor = 100;
                     return;
+                  
                 }
 
                 //| sp2 | Saved Coordenates: Position(x: 218,42638, y: -937,5165, z: 24,140625) Saved Rotation: Rotation(roll: 0, pitch: 0, yaw: 2,572643)
@@ -123,7 +112,7 @@ namespace Altv_Roleplay.Handler
                     Alt.Emit("SaltyChat:SetPlayerAlive", player, true);
                     player.EmitLocked("Client:Deathscreen:closeCEF");
                     player.Health = 200;
-                  
+
                     return;
                 }
 
@@ -196,7 +185,7 @@ namespace Altv_Roleplay.Handler
                         }
                         return;
 
-               
+
                     }
                 }
             }

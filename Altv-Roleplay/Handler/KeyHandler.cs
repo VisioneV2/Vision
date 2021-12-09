@@ -491,11 +491,11 @@ namespace Altv_Roleplay.Handler
                 {
                    if (player.HasData("FFA"))
                     {
-                        HUDHandler.SendNotification(player, 4, 5000, "Du bist bereits in ffa"); return;
+                        HUDHandler.SendNotification(player, 4, 5000, "Du bist bereits in FFA"); return;
                     }
                      
 
-                    HUDHandler.SendNotification(player, 4, 5000, "FFA BETRETEN");
+                    HUDHandler.SendNotification(player, 4, 5000, "FFA Betreten");
 
 
                     player.RemoveAllWeaponsAsync();
@@ -566,6 +566,9 @@ namespace Altv_Roleplay.Handler
                     player.GiveWeapon(AltV.Net.Enums.WeaponModel.BullpupRifle, 9999, true);
                     player.GiveWeapon(AltV.Net.Enums.WeaponModel.GusenbergSweeper, 9999, true);
                     player.GiveWeapon(AltV.Net.Enums.WeaponModel.AdvancedRifle, 9999, true);
+
+                    player.Health = 200;
+                    player.Armor = 100;
                  //   Pla(0x5a96ba4, 9999, true);
                     return;
                 }
