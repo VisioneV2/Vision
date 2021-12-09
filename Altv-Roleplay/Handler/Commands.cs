@@ -1179,6 +1179,9 @@ namespace Altv_Roleplay.Handler
 
                 switch (player.AdminLevel())
                 {
+					case 1: // Guide
+						componentColor = 0;
+						break;
                     case 2: // Support
                         componentColor = 10;
                         break;
