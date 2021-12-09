@@ -38,7 +38,7 @@ namespace Altv_Roleplay.Handler
                 if (player.HasData("FFA"))
                 {
                     ClassicPlayer killerPlayerx = (ClassicPlayer)killer;
-                        killerPlayerx.Armor = 100;
+                    killerPlayerx.Armor = 100;
                     killerPlayerx.Health = 200;
                     await Task.Delay(5000);
                     int rnd = new Random().Next(1, 192);
@@ -91,7 +91,6 @@ namespace Altv_Roleplay.Handler
                     player.Health = 200;
                     player.Armor = 100;
                     return;
-                  
                 }
 
                 //| sp2 | Saved Coordenates: Position(x: 218,42638, y: -937,5165, z: 24,140625) Saved Rotation: Rotation(roll: 0, pitch: 0, yaw: 2,572643)
@@ -112,7 +111,6 @@ namespace Altv_Roleplay.Handler
                     Alt.Emit("SaltyChat:SetPlayerAlive", player, true);
                     player.EmitLocked("Client:Deathscreen:closeCEF");
                     player.Health = 200;
-
                     return;
                 }
 
@@ -125,6 +123,7 @@ namespace Altv_Roleplay.Handler
                     {
                         HUDHandler.SendNotification(p, 4, 7500, $"{Characters.GetCharacterName(player.CharacterId)} ({player.CharacterId}) hat {Characters.GetCharacterName(player.CharacterId)} ({player.CharacterId}) getötet. Waffe: {weaponModel}");
                     }
+					
                     if (Enum.IsDefined(typeof(AntiCheat.forbiddenWeapons), (Utils.AntiCheat.forbiddenWeapons)weaponModel) && player.AdminLevel() < 8)
                     {
                         User.SetPlayerBanned(player, true, $"Waffen Hack[2]: {weaponModel}");
@@ -136,6 +135,7 @@ namespace Altv_Roleplay.Handler
                         }
                         return;
                     }
+					
                     string weaponName = WeaponHandler.GetWeaponItemNameByWeaponModel(weaponModel);
                     if ((weaponName == "" && !WeaponHandler.IsMeleeKill(weaponModel) && player.AdminLevel() < 8) || ((!WeaponHandler.IsMeleeKill(weaponModel) && player.AdminLevel() < 8 && !CharactersInventory.ExistCharacterItem((int)player.GetCharacterMetaId(), weaponName, "inventory") && !CharactersInventory.ExistCharacterItem((int)player.GetCharacterMetaId(), weaponName, "backpack"))))
                     {
@@ -149,17 +149,18 @@ namespace Altv_Roleplay.Handler
                         }
                         return;
                     }
-
                 }
                 else
                 {
                     WeaponModel weaponModel = (WeaponModel)weapon;
                     DiscordLog.SendEmbed("death", "kill", $"{Characters.GetCharacterName(killerPlayer.CharacterId)} ({killerPlayer.CharacterId}) hat {Characters.GetCharacterName(player.CharacterId)} ({player.CharacterId}) getötet. Waffe: {weaponModel}");
                     HUDHandler.SendNotification(player, 4, 7500, $"Der Spieler mit der CharakterID {killerPlayer.CharacterId} hat dich getötet. Waffe: {weaponModel}");
-                    foreach (IPlayer p in Alt.GetAllPlayers().ToList().Where(x => x != null && x.Exists && ((ClassicPlayer)x).CharacterId > 0 && x.AdminLevel() > 0))
+                    
+					foreach (IPlayer p in Alt.GetAllPlayers().ToList().Where(x => x != null && x.Exists && ((ClassicPlayer)x).CharacterId > 0 && x.AdminLevel() > 0))
                     {
                         HUDHandler.SendNotification(p, 4, 7500, $"{Characters.GetCharacterName(killerPlayer.CharacterId)} ({killerPlayer.CharacterId}) hat {Characters.GetCharacterName(player.CharacterId)} ({player.CharacterId}) getötet. Waffe: {weaponModel}");
                     }
+					
                     if (Enum.IsDefined(typeof(AntiCheat.forbiddenWeapons), (Utils.AntiCheat.forbiddenWeapons)weaponModel) && killerPlayer.AdminLevel() < 8)
                     {
                         User.SetPlayerBanned(killerPlayer, true, $"Waffen Hack[2]: {weaponModel}");
@@ -184,8 +185,6 @@ namespace Altv_Roleplay.Handler
                             HUDHandler.SendNotification(p, 4, 2500, $"{Characters.GetCharacterName(killerPlayer.CharacterId)} wurde gebannt: Waffenhack[2] - {weaponModel}");
                         }
                         return;
-
-
                     }
                 }
             }
@@ -204,6 +203,7 @@ namespace Altv_Roleplay.Handler
                 if (charId <= 0) return;
                 Position pos = new Position(player.Position.X, player.Position.Y, player.Position.Z + 1);
                 player.Spawn(pos);
+			    player.EmitLocked("SaltyChat:SetPlayerAlive", player, false);
                 player.EmitLocked("Client:Ragdoll:SetPedToRagdoll", true, 0); //Ragdoll setzen
                 player.EmitLocked("Client:Deathscreen:openCEF"); // Deathscreen öffnen
                 player.SetPlayerIsUnconscious(true);
@@ -224,6 +224,7 @@ namespace Altv_Roleplay.Handler
                 player.EmitLocked("Client:Deathscreen:closeCEF");
                 player.SetPlayerIsUnconscious(false);
                 player.SetPlayerIsFastFarm(false);
+			    player.EmitLocked("SaltyChat:SetPlayerAlive", player, true);
                 player.EmitLocked("Client:Ragdoll:SetPedToRagdoll", false, 2000);
                 Characters.SetCharacterUnconscious(charId, false, 0);
                 Characters.SetCharacterFastFarm(charId, false, 0);
@@ -252,6 +253,7 @@ namespace Altv_Roleplay.Handler
                 Alt.Log($"{e}");
             }
         }
+		
         internal static void revive(IPlayer player)
         {
             try
