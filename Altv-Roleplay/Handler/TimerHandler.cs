@@ -308,6 +308,9 @@ namespace Altv_Roleplay.Handler
                                     if (unconsciousTime > 0) { Characters.SetCharacterUnconscious(charId, true, unconsciousTime - 1); }
                                     else if (unconsciousTime <= 0)
                                     {
+                                        if (player.HasData("Stabi")) return;
+                                        
+
                                         Characters.SetCharacterUnconscious(charId, false, 0);
                                         DeathHandler.closeDeathscreen(player);
                                         player.Spawn(new Position(355.54285f, -596.33405f, 28.75768f));

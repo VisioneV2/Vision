@@ -123,7 +123,14 @@ namespace Altv_Roleplay.Handler
             HUDHandler.SendNotification(player, 4, 5000, "Erstellt");
         }
 
-
+        [Command("Stabi")]
+        public void CMD_Stabi(IPlayer player)
+        {
+            if (player == null || !player.Exists) return;
+            if (player.AdminLevel() < 5) { HUDHandler.SendNotification(player, 4, 5000, "Keine Rechte."); return; }
+            if (!player.HasData("isAduty")) { HUDHandler.SendNotification(player, 4, 5000, "Nicht im (/am) Admindienst."); return; }
+            player.SetData("Stabi", true);
+        }
         [Command("vscp")] // setzt vehicle price
         public void vehPrice(IPlayer player, string car, int price)
         {

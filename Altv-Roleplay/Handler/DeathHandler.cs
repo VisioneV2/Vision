@@ -114,6 +114,26 @@ namespace Altv_Roleplay.Handler
                     return;
                 }
 
+                if (player.HasData("Stabi"))
+                {
+
+                    if (player.Health == 100) return;
+                    
+                       
+                    
+                   
+                    await Task.Delay(900000);
+
+                    player.Spawn(new Position(355.54285f, -596.33405f, 28.75768f), 0);
+                    player.Position = new Position(355.54285f, -596.33405f, 28.75768f);
+                    Characters.SetCharacterUnconscious(charId, false, 0);
+                    DeathHandler.closeDeathscreen(player);
+                    player.Health = player.MaxHealth;
+                
+                    player.DeleteData("Stabi");
+                    return;
+                }
+
                 ClassicPlayer killerPlayer = (ClassicPlayer)killer;
                 if (killerPlayer == null || !killerPlayer.Exists)
                 {
