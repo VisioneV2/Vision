@@ -257,10 +257,10 @@ namespace Altv_Roleplay.Model
             {
                 itemName = x.itemName,
                 itemPicName = ReturnItemPicSRC(x.itemName),
-                itemWeight = ServerItems.GetItemWeight(x.itemName),
-                isItemDroppable = ServerItems.IsItemDroppable(ServerItems.ReturnNormalItemName(x.itemName)),
-                isItemUseable = ServerItems.IsItemUseable(ServerItems.ReturnNormalItemName(x.itemName)),
-                isItemGiveable = ServerItems.IsItemGiveable(ServerItems.ReturnNormalItemName(x.itemName))
+                itemWeight = GetItemWeight(x.itemName),
+                isItemDroppable = IsItemDroppable(ReturnNormalItemName(x.itemName)),
+                isItemUseable = IsItemUseable(ReturnNormalItemName(x.itemName)),
+                isItemGiveable = IsItemGiveable(ReturnNormalItemName(x.itemName))
             });
 
             return JsonConvert.SerializeObject(items);

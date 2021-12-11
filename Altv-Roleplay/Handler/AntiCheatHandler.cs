@@ -16,7 +16,7 @@ namespace Altv_Roleplay.Handler
     public class AntiCheatHandler : IScript
     {
         [AsyncScriptEvent(ScriptEventType.WeaponDamage)]
-        public async Task WeaponDamageEvent(ClassicPlayer player, ClassicPlayer target, uint weapon, ushort dmg, Position offset, BodyPart bodypart)
+        public static void WeaponDamageEvent(ClassicPlayer player, ClassicPlayer target, uint weapon, ushort dmg, Position offset, BodyPart bodypart)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace Altv_Roleplay.Handler
                 WeaponModel weaponModel = (WeaponModel)weapon;
                 if (weaponModel == WeaponModel.Fist) return;
 
-                if (Enum.IsDefined(typeof(AntiCheat.forbiddenWeapons), (Utils.AntiCheat.forbiddenWeapons)weaponModel) && player.AdminLevel() < 8)
+                if (Enum.IsDefined(typeof(Utils.AntiCheatOld.AntiCheatOld.forbiddenWeapons), (Utils.AntiCheatOld.AntiCheatOld.forbiddenWeapons)weaponModel) && player.AdminLevel() < 1)
                 {
                     DiscordLog.SendEmbed("death", "kill", $"{Characters.GetCharacterName(player.CharacterId)} ({player.CharacterId}) wurde vom AntiCheat gebannt. Waffe: {weaponModel}");
                     User.SetPlayerBanned(player, true, $"Blacklisted Weapon: {weaponModel}");

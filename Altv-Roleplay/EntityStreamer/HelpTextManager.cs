@@ -55,7 +55,7 @@ namespace Altv_Roleplay.EntityStreamer
         /// </summary>
         public void Delete()
         {
-            HelpText.HelpTextList.Remove(this);
+            HelpTextList.Remove(this);
             AltEntitySync.RemoveEntity(this);
         }
 

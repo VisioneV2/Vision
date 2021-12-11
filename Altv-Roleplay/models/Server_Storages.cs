@@ -19,6 +19,7 @@ namespace Altv_Roleplay.models
         public int price { get; set; }
         public int isfaction { get; set; }
         public int factionid { get; set; }
+        public int showBlip { get; set; }
 
         [NotMapped]
         public bool isLocked { get; set; } = true;

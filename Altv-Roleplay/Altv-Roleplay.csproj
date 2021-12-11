@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>../../server/resources/roleplay</OutputPath>
+		<OutputPath>../server/resources/roleplay</OutputPath>
 		<WarningLevel>5</WarningLevel>
 	</PropertyGroup>
 
@@ -22,12 +22,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AltV.Net.Async" Version="6.0.2" />
+		<PackageReference Include="AltV.Net.Async" Version="7.1.4" />
 		<PackageReference Include="AltV.Net.EntitySync" Version="1.13.0" />
-		<PackageReference Include="AltV.Net.EntitySync.ServerEvent" Version="4.0.0" />
-		<PackageReference Include="AltV.Net.Resources.Chat.Api" Version="1.48.0" />
+		<PackageReference Include="AltV.Net.EntitySync.ServerEvent" Version="7.1.4" />
+		<PackageReference Include="AltV.Net.Resources.Chat.Api" Version="7.1.4" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
-		<PackageReference Include="GitHub" Version="1.34.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.6">
 			<PrivateAssets>all</PrivateAssets>
@@ -44,6 +43,18 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\DiscordLog\DiscordLog.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EditorConfigFiles Remove="F:\vRP\Source\Vision_Dev\Altv-Roleplay\.editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="F:\vRP\Source\Vision_Dev\Altv-Roleplay\.editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="AntiCheat\" />
 	</ItemGroup>
 
 </Project>

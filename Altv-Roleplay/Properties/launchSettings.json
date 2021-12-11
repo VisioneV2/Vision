@@ -2,8 +2,8 @@
   "profiles": {
     "Altv-Roleplay": {
       "commandName": "Executable",
-      "executablePath": "C:\\Users\\Administrator\\Desktop\\Valea-Script-Reworked-master\\server\\altv-server.exe",
-      "workingDirectory": "C:\\Users\\Administrator\\Desktop\\Valea-Script-Reworked-master\\server\\resources\\roleplay"
+      "executablePath": "../server/altv-server.exe",
+      "workingDirectory": "../server/resources/roleplay"
     }
   }
 }

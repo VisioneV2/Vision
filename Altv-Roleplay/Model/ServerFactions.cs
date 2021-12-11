@@ -232,7 +232,7 @@ namespace Altv_Roleplay.Model
             Server_Factions x = ServerFactions_.ToList().FirstOrDefault(y => y.id == factionId);
             if (x != null)
             {
-                return Utils.Constants.Positions.fraktionslager_ExitPosition;
+                return Constants.Positions.fraktionslager_ExitPosition;
                 /*switch (x.type)
                 {
                     case 2: return Utils.Constants.Positions.weedLabor_ExitPosition;
@@ -246,7 +246,7 @@ namespace Altv_Roleplay.Model
             Server_Factions x = ServerFactions_.ToList().FirstOrDefault(y => y.id == factionId);
             if (x != null)
             {
-                return Utils.Constants.Positions.weedLabor_ExitPosition;
+                return Constants.Positions.weedLabor_ExitPosition;
                 /*switch (x.type)
                 {
                     case 2: return Utils.Constants.Positions.weedLabor_ExitPosition;
@@ -261,7 +261,7 @@ namespace Altv_Roleplay.Model
             Server_Factions x = ServerFactions_.ToList().FirstOrDefault(y => y.id == factionId);
             if (x != null)
             {
-                return Utils.Constants.Positions.waffenLabor_ExitPosition;
+                return Constants.Positions.waffenLabor_ExitPosition;
                 /*switch (x.type)
                 {
                     case 2: return Utils.Constants.Positions.weedLabor_ExitPosition;
@@ -300,8 +300,8 @@ namespace Altv_Roleplay.Model
                 if (factionMemberData != null) return;
                 var phone = Characters.GetCharacterPhonenumber(charId);
                 var charname = Characters.GetCharacterName(charId);
-                var RankName = ServerFactions.GetFactionRankName(factionId, rank);
-                var factionname = ServerFactions.GetFactionShortName(factionId);
+                var RankName = GetFactionRankName(factionId, rank);
+                var factionname = GetFactionShortName(factionId);
                 var factionInviteData = new Server_Faction_Members
                 {
                     charId = charId,

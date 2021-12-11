@@ -256,7 +256,7 @@ namespace Altv_Roleplay.Handler
                     return;
                 }
 
-                models.Server_Vehicles dbVeh = Model.ServerVehicles.ServerVehicles_.FirstOrDefault(x => x.id == veh.VehicleId);
+                models.Server_Vehicles dbVeh = ServerVehicles.ServerVehicles_.FirstOrDefault(x => x.id == veh.VehicleId);
                 if (dbVeh == null) return;
 
                 //entfernen

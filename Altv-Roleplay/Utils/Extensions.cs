@@ -33,7 +33,7 @@ namespace Altv_Roleplay.Utils
         public static void updateTattoos(this ClassicPlayer player)
         {
             if (player == null || !player.Exists || player.CharacterId <= 0) return;
-            player.EmitAsync("Client:Utilities:setTattoos", Model.CharactersTattoos.GetAccountTattoos(player.CharacterId));
+            player.EmitAsync("Client:Utilities:setTattoos", CharactersTattoos.GetAccountTattoos(player.CharacterId));
         }
 
         public static bool HasVehicleId(this IVehicle vehicle)

@@ -4,6 +4,8 @@ using AltV.Net.Elements.Entities;
 using Altv_Roleplay.Factories;
 using Altv_Roleplay.Model;
 using Altv_Roleplay.Services;
+using Altv_Roleplay.Utils;
+using MySql.Data.MySqlClient;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -239,6 +241,31 @@ namespace Altv_Roleplay.Handler
             catch (Exception e)
             {
                 Alt.Log($"{e}");
+            }
+        }
+
+        [AsyncClientEvent("Server:FactionBank:WithdrawMoney")]
+        public static void UpdateBank(IPlayer player, string zoneName)
+        {
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(Constants.DatabaseConfig.Database))
+                {
+                    connection.Open();
+                    MySqlCommand command = connection.CreateCommand();
+                    command.CommandText = "UPDATE server_shops SET bank=@bank WHERE id=@id";
+                    command.Parameters.AddWithValue("@id", 0);
+                    command.Parameters.AddWithValue("@posX", player.Position.X);
+                    command.Parameters.AddWithValue("@posY", player.Position.Y);
+                    command.Parameters.AddWithValue("@posZ", player.Position.Z);
+                    command.Parameters.AddWithValue("@zoneName", zoneName);
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e}");
             }
         }
     }

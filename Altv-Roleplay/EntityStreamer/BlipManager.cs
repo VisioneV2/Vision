@@ -8,7 +8,7 @@ namespace Altv_Roleplay.EntityStreamer
     /// <summary>
     /// Blip class that stores all data related to a single blip.
     /// </summary>
-    public class Blip : AltV.Net.EntitySync.Entity, AltV.Net.EntitySync.IEntity
+    public class Blip : Entity, IEntity
     {
         /// <summary>
         /// The text to display on the blip in the map menu
@@ -205,7 +205,7 @@ namespace Altv_Roleplay.EntityStreamer
         {
             List<Blip> objects = new List<Blip>();
 
-            foreach (KeyValuePair<ulong, Blip> entity in BlipStreamer.BlipList)
+            foreach (KeyValuePair<ulong, Blip> entity in BlipList)
             {
                 Blip obj = GetBlip(entity.Key);
 

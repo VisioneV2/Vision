@@ -2,12 +2,12 @@
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
+using Altv_Roleplay.EntityStreamer;
 using Altv_Roleplay.Factories;
 using Altv_Roleplay.Handler;
 using Altv_Roleplay.Model;
 using Altv_Roleplay.models;
 using Altv_Roleplay.Utils;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -871,7 +871,7 @@ namespace Altv_Roleplay.Database
                     Alt.Log($"{ServerVehicleShops.ServerVehicleShopsItems_.Count} Server-Vehicle-ShopItems wurden geladen.");
                 }
 
-                foreach (var veh in ServerVehicleShops.ServerVehicleShopsItems_.Where(x => x.isOnlyOnlineAvailable == false))
+                foreach (var veh in ServerVehicleShops.ServerVehicleShopsItems_.Where(x => x.isOnlyOnlineAvailable == false && x.posX != 0))
                 {
                     if (veh.isSpawned == 1)
                     {
@@ -938,8 +938,8 @@ namespace Altv_Roleplay.Database
                     {
                         string blipName = $"{shop.name}";
                         if (shop.isOnlySelling == true) blipName = $"Verkauf: {shop.name}";
-                        //if (shop.name.Contains("Ammunation") && !shop.isOnlySelling) ; // Useless stuff idk why its needed, bye
-                        //if (shop.name.Contains("Juwelier") && !shop.isOnlySelling) ;
+                        //if (shop.name.Contains("Ammunation") && !shop.isOnlySelling); // Useless stuff idk why its needed, bye
+                        //if (shop.name.Contains("Juwelier") && !shop.isOnlySelling);
                     }
 
                     var PedData = new Server_Peds
@@ -1007,7 +1007,6 @@ namespace Altv_Roleplay.Database
             }
         }
 
-
         internal static void LoadAllServerStorages()
         {
             try
@@ -1022,6 +1021,7 @@ namespace Altv_Roleplay.Database
                 {
                     EntityStreamer.MarkerStreamer.Create(EntityStreamer.MarkerTypes.MarkerTypeVerticalCylinder, new Vector3(storage.entryPos.X, storage.entryPos.Y, storage.entryPos.Z - 1), new Vector3(1), color: new Rgba(255, 51, 51, 100), streamRange: 50);
                     EntityStreamer.HelpTextStreamer.Create("Drücke E um die Lagerhalle zu betreten und U um sie zu öffnen / schließen.", storage.entryPos, streamRange: 2);
+
                     if (ServerStorages.GetOwner(storage.id) == 0)
                     {
                     }
@@ -1151,9 +1151,9 @@ namespace Altv_Roleplay.Database
                     {
                         alpha = 150,
                         bobUpAndDown = false,
-                        posX = Handler.RobberyHandler.jeweleryRobPosition.X,
-                        posY = Handler.RobberyHandler.jeweleryRobPosition.Y,
-                        posZ = Handler.RobberyHandler.jeweleryRobPosition.Z - 1,
+                        posX = RobberyHandler.jeweleryRobPosition.X,
+                        posY = RobberyHandler.jeweleryRobPosition.Y,
+                        posZ = RobberyHandler.jeweleryRobPosition.Z - 1,
                         scaleX = 1,
                         scaleY = 1,
                         scaleZ = 1,
@@ -1167,9 +1167,9 @@ namespace Altv_Roleplay.Database
                     {
                         alpha = 150,
                         bobUpAndDown = false,
-                        posX = Handler.RobberyHandler.bankRobPosition.X,
-                        posY = Handler.RobberyHandler.bankRobPosition.Y,
-                        posZ = Handler.RobberyHandler.bankRobPosition.Z - 1,
+                        posX = RobberyHandler.bankRobPosition.X,
+                        posY = RobberyHandler.bankRobPosition.Y,
+                        posZ = RobberyHandler.bankRobPosition.Z - 1,
                         scaleX = 1,
                         scaleY = 1,
                         scaleZ = 1,
@@ -1183,9 +1183,9 @@ namespace Altv_Roleplay.Database
                     {
                         alpha = 150,
                         bobUpAndDown = false,
-                        posX = Handler.RobberyHandler.bankExitPosition.X,
-                        posY = Handler.RobberyHandler.bankExitPosition.Y,
-                        posZ = Handler.RobberyHandler.bankExitPosition.Z - 1,
+                        posX = RobberyHandler.bankExitPosition.X,
+                        posY = RobberyHandler.bankExitPosition.Y,
+                        posZ = RobberyHandler.bankExitPosition.Z - 1,
                         scaleX = 1,
                         scaleY = 1,
                         scaleZ = 1,
@@ -1195,7 +1195,8 @@ namespace Altv_Roleplay.Database
                         blue = 77
                     });
 
-                    foreach (var bankRobGold in Handler.RobberyHandler.bankPickUpPositions)
+                    foreach (var bankRobGold in RobberyHandler.bankPickUpPositions)
+                    {
                         ServerBlips.ServerMarkers_.Add(new Server_Markers
                         {
                             alpha = 150,
@@ -1211,6 +1212,7 @@ namespace Altv_Roleplay.Database
                             green = 77,
                             blue = 77
                         });
+                    }
                 }
             }
             catch (Exception e)
@@ -1384,7 +1386,7 @@ namespace Altv_Roleplay.Database
 
                             var ServerGarageBlipData = new Server_Blips
                             {
-                                name = $"{garageType}: {garage.name}",
+                                name = $"{garageType}",
                                 color = garageColor,
                                 scale = 0.5f,
                                 shortRange = true,
@@ -1393,10 +1395,7 @@ namespace Altv_Roleplay.Database
                                 posY = garage.posY,
                                 posZ = garage.posZ
                             };
-                            //if (garage.id != 6)
-                            //{
                             ServerBlips.ServerBlips_.Add(ServerGarageBlipData);
-                            //}
                         }
 
                         var ServerGaragePedData = new Server_Peds
@@ -1461,6 +1460,25 @@ namespace Altv_Roleplay.Database
                 {
                     ServerATM.ServerATM_ = new List<Server_ATM>(db.Server_ATM);
                     Alt.Log($"{ServerATM.ServerATM_.Count} Server-ATMs wurden geladen.");
+
+                    foreach (var atm in ServerATM.ServerATM_)
+                    {
+                        if (atm.showBlip != 0)
+                        {
+                            var ServerATMMarkerData = new Server_Blips
+                            {
+                                name = "Bankautomat",
+                                color = 25,
+                                scale = 0.75f,
+                                shortRange = true,
+                                sprite = 500,
+                                posX = atm.posX,
+                                posY = atm.posY,
+                                posZ = atm.posZ
+                            };
+                            ServerBlips.ServerBlips_.Add(ServerATMMarkerData);
+                        }
+                    }
                 }
             }
             catch (Exception e)
@@ -1479,10 +1497,17 @@ namespace Altv_Roleplay.Database
                     Alt.Log($"{ServerBanks.ServerBanks_.Count} Server-Banken wurden geladen.");
                     foreach (var bank in ServerBanks.ServerBanks_)
                     {
-                        /*string bName = "Fleeca Bank";
-                        int bColor = 2,
-                            bSprite = 500;*/
-                        /*if(bank.zoneName == "Maze Bank") { bName = "Maze Bank"; bColor = 1; bSprite = 605; }
+                        string bName = "Fleeca Bank";
+                        int bColor = 2;
+                        int bSprite = 500;
+
+                        if (bank.zoneName == "Maze Bank")
+                        {
+                            bName = "Maze Bank";
+                            bColor = 1;
+                            bSprite = 605;
+                        }
+
                         if (bank.zoneName != "Maze Bank Fraktion" && bank.zoneName != "Maze Bank Company")
                         {
                             var ServerBankBlipData = new Server_Blips
@@ -1497,7 +1522,7 @@ namespace Altv_Roleplay.Database
                                 posZ = bank.posZ
                             };
                             ServerBlips.ServerBlips_.Add(ServerBankBlipData);
-                        }*/
+                        }
 
                         var ServerBankMarkerData = new Server_Markers
                         {
@@ -1568,7 +1593,6 @@ namespace Altv_Roleplay.Database
                     ServerClothesShops.ServerClothesShopsItems_ = new List<Server_Clothes_Shops_Items>(db.Server_Clothes_Shops_Items);
                     Alt.Log($"{ServerClothesShops.ServerClothesShopsItems_.Count} Server-Clothes-Shop-Items wurden geladen.");
 
-
                 }
 
                 foreach (var cs in ServerClothesShops.ServerClothesShops_)
@@ -1634,8 +1658,6 @@ namespace Altv_Roleplay.Database
                 Alt.Log($"{e}");
             }
         }
-
-
 
         internal static void LoadAllServerTeleports()
         {
@@ -1771,58 +1793,33 @@ namespace Altv_Roleplay.Database
             return Task.CompletedTask;
         }
 
-
-        public static void UpdateBank(IPlayer player, string zoneName)
+        public static void LoadAllServerUtilities()
         {
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(Constants.DatabaseConfig.Database))
+                using (var db = new gtaContext())
                 {
-                    connection.Open();
-                    MySqlCommand command = connection.CreateCommand();
-                    command.CommandText = "UPDATE server_shops SET bank=@bank WHERE id=@id";
-                    command.Parameters.AddWithValue("@id", 0);
-                    command.Parameters.AddWithValue("@posX", player.Position.X);
-                    command.Parameters.AddWithValue("@posY", player.Position.Y);
-                    command.Parameters.AddWithValue("@posZ", player.Position.Z);
-                    command.Parameters.AddWithValue("@zoneName", zoneName);
-                    command.ExecuteNonQuery();
-                    connection.Close();
+                    ServerStorages.ServerStorages_ = new List<Server_Storages>(db.Server_Storages);
                 }
+
+                Alt.Log($"{ServerStorages.ServerStorages_.Count} Storages geladen..");
+                foreach (Server_Storages storage in ServerStorages.ServerStorages_.ToList())
+                {
+                    MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, new Vector3(storage.entryPos.X, storage.entryPos.Y, storage.entryPos.Z - 1), new Vector3(1), color: new Rgba(255, 51, 51, 100), streamRange: 50);
+                    HelpTextStreamer.Create("Drücke E um die Lagerhalle zu betreten und U um sie zu öffnen / schließen.", storage.entryPos, streamRange: 2);
+                    
+                    if(storage.showBlip != 0)
+                    {
+                        BlipStreamer.CreateStaticBlip("Lagerhalle", 0, 0.5f, true, 50, storage.entryPos, 0);
+                    }
+                }
+                MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, new Vector3(Constants.Positions.storage_ExitPosition.X, Constants.Positions.storage_ExitPosition.Y, Constants.Positions.storage_ExitPosition.Z - 1), new Vector3(1), color: new Rgba(150, 0, 0, 100), streamRange: 15, dimension: -2147483648);
+                MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, new Vector3(Constants.Positions.storage_InvPosition.X, Constants.Positions.storage_InvPosition.Y, Constants.Positions.storage_InvPosition.Z - 1), new Vector3(1), color: new Rgba(150, 0, 0, 100), streamRange: 15, dimension: -2147483648);
             }
             catch (Exception e)
             {
                 Console.WriteLine($"{e}");
             }
         }
-
-        /*
-                public static void LoadAllServerUtilities()
-                {
-                    try
-                    {
-                        using (var db = new gtaContext())
-                        {
-                            ServerStorages.ServerStorages_ = new List<Server_Storages>(db.Server_Storages);
-                        }
-                        Alt.Log($"{ServerStorages.ServerStorages_.Count} Storages geladen..");
-
-                        foreach (Server_Storages storage in ServerStorages.ServerStorages_.ToList())
-                        {
-                            MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, new Vector3(storage.entryPos.X, storage.entryPos.Y, storage.entryPos.Z - 1), new Vector3(1), color: new Rgba(255, 51, 51, 100), streamRange: 50);
-                            HelpTextStreamer.Create("Drücke E um die Lagerhalle zu betreten und U um sie zu öffnen / schließen.", storage.entryPos, streamRange: 2);
-                            BlipStreamer.CreateStaticBlip("Lagerhalle", 0, 0.5f, true, 50, storage.entryPos, 0);
-                        }
-                        MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, new Vector3(Constants.Positions.storage_ExitPosition.X, Constants.Positions.storage_ExitPosition.Y, Constants.Positions.storage_ExitPosition.Z - 1), new Vector3(1), color: new Rgba(150, 0, 0, 100), streamRange: 15, dimension: -2147483648);
-                        MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, new Vector3(Constants.Positions.storage_InvPosition.X, Constants.Positions.storage_InvPosition.Y, Constants.Positions.storage_InvPosition.Z - 1), new Vector3(1), color: new Rgba(150, 0, 0, 100), streamRange: 15, dimension: -2147483648);
-
-
-
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"{e}");
-                    }
-                }*/
     }
 }

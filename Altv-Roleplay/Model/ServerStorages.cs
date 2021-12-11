@@ -21,6 +21,7 @@ namespace Altv_Roleplay.Model
                 x.price,
             }).OrderBy(x => x.id).ToList());
         }
+
         public static string GetAccountStorages(int accId)
         {
             return JsonConvert.SerializeObject(ServerStorages_.ToList().Where(x => x.owner == accId).Select(x => new

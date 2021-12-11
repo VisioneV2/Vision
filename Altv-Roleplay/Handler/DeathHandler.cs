@@ -7,9 +7,7 @@ using Altv_Roleplay.Factories;
 using Altv_Roleplay.Model;
 using Altv_Roleplay.Utils;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 
 
@@ -107,7 +105,7 @@ namespace Altv_Roleplay.Handler
                 if (player.HasData("FFA"))
                 {
                     await Task.Delay(5000);
-                    DeathHandler.revive(player);
+                    revive(player);
                     Alt.Emit("SaltyChat:SetPlayerAlive", player, true);
                     player.EmitLocked("Client:Deathscreen:closeCEF");
                     player.Health = 200;
@@ -127,7 +125,7 @@ namespace Altv_Roleplay.Handler
                     player.Spawn(new Position(355.54285f, -596.33405f, 28.75768f), 0);
                     player.Position = new Position(355.54285f, -596.33405f, 28.75768f);
                     Characters.SetCharacterUnconscious(charId, false, 0);
-                    DeathHandler.closeDeathscreen(player);
+                    closeDeathscreen(player);
                     player.Health = player.MaxHealth;
                 
                     player.DeleteData("Stabi");
@@ -144,7 +142,7 @@ namespace Altv_Roleplay.Handler
                         HUDHandler.SendNotification(p, 4, 7500, $"{Characters.GetCharacterName(player.CharacterId)} ({player.CharacterId}) hat {Characters.GetCharacterName(player.CharacterId)} ({player.CharacterId}) getötet. Waffe: {weaponModel}");
                     }
 					
-                    if (Enum.IsDefined(typeof(AntiCheat.forbiddenWeapons), (Utils.AntiCheat.forbiddenWeapons)weaponModel) && player.AdminLevel() < 8)
+                    if (Enum.IsDefined(typeof(AntiCheat.forbiddenWeapons), (AntiCheat.forbiddenWeapons)weaponModel) && player.AdminLevel() < 8)
                     {
                         User.SetPlayerBanned(player, true, $"Waffen Hack[2]: {weaponModel}");
                         player.Kick("");
@@ -181,7 +179,7 @@ namespace Altv_Roleplay.Handler
                         HUDHandler.SendNotification(p, 4, 7500, $"{Characters.GetCharacterName(killerPlayer.CharacterId)} ({killerPlayer.CharacterId}) hat {Characters.GetCharacterName(player.CharacterId)} ({player.CharacterId}) getötet. Waffe: {weaponModel}");
                     }
 					
-                    if (Enum.IsDefined(typeof(AntiCheat.forbiddenWeapons), (Utils.AntiCheat.forbiddenWeapons)weaponModel) && killerPlayer.AdminLevel() < 8)
+                    if (Enum.IsDefined(typeof(AntiCheat.forbiddenWeapons), (AntiCheat.forbiddenWeapons)weaponModel) && killerPlayer.AdminLevel() < 8)
                     {
                         User.SetPlayerBanned(killerPlayer, true, $"Waffen Hack[2]: {weaponModel}");
                         killerPlayer.Kick("");

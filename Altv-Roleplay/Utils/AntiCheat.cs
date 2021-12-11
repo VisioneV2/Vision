@@ -1,7 +1,7 @@
 ﻿/// Samuele
-namespace Altv_Roleplay.Utils
+namespace Altv_Roleplay.Utils.AntiCheatOld
 {
-    public class AntiCheat
+    public class AntiCheatOld
     {
         public enum forbiddenWeapons : uint
         {

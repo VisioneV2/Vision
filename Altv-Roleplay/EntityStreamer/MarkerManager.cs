@@ -431,7 +431,7 @@ namespace Altv_Roleplay.EntityStreamer
         /// </summary>
         public void Destroy()
         {
-            Marker.MarkerList.Remove(this);
+            MarkerList.Remove(this);
             AltEntitySync.RemoveEntity(this);
         }
     }

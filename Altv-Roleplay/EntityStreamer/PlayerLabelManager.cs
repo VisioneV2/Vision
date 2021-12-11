@@ -268,7 +268,7 @@ namespace Altv_Roleplay.EntityStreamer
         /// </summary>
         public void Delete()
         {
-            PlayerLabel.LabelList.Remove(this);
+            LabelList.Remove(this);
             AltEntitySync.RemoveEntity(this);
         }
 

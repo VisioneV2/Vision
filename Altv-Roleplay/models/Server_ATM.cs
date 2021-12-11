@@ -13,5 +13,6 @@ namespace Altv_Roleplay.models
         public float posZ { get; set; }
         public string zoneName { get; set; }
         public int isrobbed { get; set; }
+        public int showBlip { get; set; }
     }
 }

@@ -617,22 +617,22 @@ namespace Altv_Roleplay.Handler
         {
             try
             {
-                if (WeaponHandler.GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "PrimaryWeapon")) == (WeaponModel)hash)
+                if (GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "PrimaryWeapon")) == (WeaponModel)hash)
                 {
                     var wName = Characters.GetCharacterWeapon(player, "PrimaryWeapon");
                 }
-                else if (WeaponHandler.GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "PrimaryWeapon")) == (WeaponModel)hash)
+                else if (GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "PrimaryWeapon")) == (WeaponModel)hash)
                 {
                     var wName = Characters.GetCharacterWeapon(player, "SecondaryWeapon");
                 }
-                else if (WeaponHandler.GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "PrimaryWeapon")) == (WeaponModel)hash)
+                else if (GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "PrimaryWeapon")) == (WeaponModel)hash)
                 {
                     var wName = Characters.GetCharacterWeapon(player, "SecondaryWeapon2");
                 }
 
 
 
-                if (WeaponHandler.GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "PrimaryWeapon")) == (WeaponModel)hash)
+                if (GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "PrimaryWeapon")) == (WeaponModel)hash)
                 {
                     var wName = Characters.GetCharacterWeapon(player, "PrimaryWeapon");
 
@@ -752,7 +752,7 @@ namespace Altv_Roleplay.Handler
                         player.GiveWeapon(GetWeaponModelByName(FistWeaponRemove), 0, false);
                     }
                 }
-                else if (WeaponHandler.GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "SecondaryWeapon")) == (WeaponModel)hash)
+                else if (GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "SecondaryWeapon")) == (WeaponModel)hash)
                 {
                     var wName = Characters.GetCharacterWeapon(player, "SecondaryWeapon");
 
@@ -853,7 +853,7 @@ namespace Altv_Roleplay.Handler
                         player.GiveWeapon(GetWeaponModelByName(FistWeaponRemove), 0, false);
                     }
                 }
-                else if (WeaponHandler.GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "SecondaryWeapon2")) == (WeaponModel)hash)
+                else if (GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "SecondaryWeapon2")) == (WeaponModel)hash)
                 {
                     var wName = Characters.GetCharacterWeapon(player, "SecondaryWeapon2");
 
@@ -917,15 +917,15 @@ namespace Altv_Roleplay.Handler
         {
             try
             {
-                if (WeaponHandler.GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "PrimaryWeapon")) == (WeaponModel)hash)
+                if (GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "PrimaryWeapon")) == (WeaponModel)hash)
                 {
                     Characters.SetCharacterWeapon(player, "PrimaryAmmo", ammo);
                 }
-                else if (WeaponHandler.GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "SecondaryWeapon")) == (WeaponModel)hash)
+                else if (GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "SecondaryWeapon")) == (WeaponModel)hash)
                 {
                     Characters.SetCharacterWeapon(player, "SecondaryAmmo", ammo);
                 }
-                else if (WeaponHandler.GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "SecondaryWeapon2")) == (WeaponModel)hash)
+                else if (GetWeaponModelByName((string)Characters.GetCharacterWeapon(player, "SecondaryWeapon2")) == (WeaponModel)hash)
                 {
                     Characters.SetCharacterWeapon(player, "SecondaryAmmo2", ammo);
                 }

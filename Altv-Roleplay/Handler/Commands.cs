@@ -101,17 +101,17 @@ namespace Altv_Roleplay.Handler
         {
             if (player == null || !player.Exists) return;
             if (player.AdminLevel() < 9) { HUDHandler.SendNotification(player, 4, 5000, "Keine Rechte."); return; }
-            models.Server_Storages st = new models.Server_Storages
+            Server_Storages st = new Server_Storages
             {
                 entryPos = player.Position,
-                items = new List<models.Server_Storage_Item>(),
+                items = new List<Server_Storage_Item>(),
                 owner = 0,
                 secondOwner = 0,
                 maxSize = 200f,
                 price = 25000
             };
 
-            Model.ServerStorages.ServerStorages_.Add(st);
+            ServerStorages.ServerStorages_.Add(st);
 
             using (gtaContext gta = new gtaContext())
             {
@@ -119,7 +119,7 @@ namespace Altv_Roleplay.Handler
                 gta.SaveChanges();
             }
             EntityStreamer.BlipStreamer.CreateStaticBlip("Lagerhalle", 0, 0.5f, true, 50, player.Position, 0);
-            EntityStreamer.MarkerStreamer.Create(EntityStreamer.MarkerTypes.MarkerTypeVerticalCylinder, new Vector3(player.Position.X, player.Position.Y, player.Position.Z - 1), new System.Numerics.Vector3(1), color: new AltV.Net.Data.Rgba(180, 50, 50, 100), dimension: 0, streamRange: 100);
+            EntityStreamer.MarkerStreamer.Create(EntityStreamer.MarkerTypes.MarkerTypeVerticalCylinder, new Vector3(player.Position.X, player.Position.Y, player.Position.Z - 1), new Vector3(1), color: new Rgba(180, 50, 50, 100), dimension: 0, streamRange: 100);
             HUDHandler.SendNotification(player, 4, 5000, "Erstellt");
         }
 
@@ -131,6 +131,7 @@ namespace Altv_Roleplay.Handler
             if (!player.HasData("isAduty")) { HUDHandler.SendNotification(player, 4, 5000, "Nicht im (/am) Admindienst."); return; }
             player.SetData("Stabi", true);
         }
+
         [Command("vscp")] // setzt vehicle price
         public void vehPrice(IPlayer player, string car, int price)
         {
@@ -358,7 +359,7 @@ namespace Altv_Roleplay.Handler
                 Alt.Log($"{e}");
             }
         }
-     
+
         [Command("quitffa")]
         public static void CMD_QFFA(IPlayer player)
         {
@@ -399,7 +400,7 @@ namespace Altv_Roleplay.Handler
 
             ulong charId = player.GetCharacterMetaId();
             if (charId <= 0) return;
-            if (ID <= 0 || ID >= 16) { HUDHandler.SendNotification(player, 4, 5000, "Benutze /ReloadDB <id> 1 - 14"); return; } //Diff -1 |{value}| +1
+            if (ID <= 0 || ID >= 17) { HUDHandler.SendNotification(player, 4, 5000, "Benutze /ReloadDB <id> 1 - 16"); return; } //Diff -1 |{value}| +1
 
             switch (ID)
             {
@@ -486,6 +487,10 @@ namespace Altv_Roleplay.Handler
                     HUDHandler.SendNotification(player, 2, 5000, "Häuser neu geladen!");
                     Alt.Log("ReloadDB 15 Called");
                     break;
+                case 16: // Lagerhallen
+                    DatabaseHandler.LoadAllServerStorages();
+                    HUDHandler.SendNotification(player, 2, 5000, "Lagerhallen neu geladen!");
+                    break;
             }
         }
 
@@ -500,7 +505,7 @@ namespace Altv_Roleplay.Handler
             ServerBank.CreateNewBank(player, 0, player.Position, zoneName);
             HUDHandler.SendNotification(player, 2, 3500, $"Du hast die Bank {zoneName} erfolgreich erstellt!");
         }
- 
+
         [Command("getaccountidbymail")]
         public static void CMD_getAccountIdByMail(ClassicPlayer player, string mail)
         {
@@ -760,7 +765,7 @@ namespace Altv_Roleplay.Handler
                 {
                     veh.EngineOn = true;
                     veh.LockState = VehicleLockState.Unlocked;
-                    veh.SetNumberplateTextAsync("CGRP");
+                    veh.SetNumberplateTextAsync("vRP-Admin");
                     veh.PrimaryColor = 1;
                     veh.SecondaryColor = 1;
                     veh.DashboardColor = 1;
@@ -808,7 +813,6 @@ namespace Altv_Roleplay.Handler
                     hashFile.WriteLine("| " + car + " | " + "Saved hash: " + hashedCar);
                     hashFile.Close();
                 }
-
             }
             catch (Exception e)
             {
@@ -899,24 +903,24 @@ namespace Altv_Roleplay.Handler
             }
         }
 
-        /* [Command("parkvehicle")]
-         public static void CMD_parkVehicleById(IPlayer player, int vehId)
-         {
-             try
-             {
-                 if (player == null || !player.Exists || player.AdminLevel() <= 8 || vehId <= 0) return;
-                 if (!player.HasData("isAduty")) { HUDHandler.SendNotification(player, 4, 5000, "Nicht im (/am) Admindienst."); return; }
-                 var vehicle = Alt.GetAllVehicles().ToList().FirstOrDefault(x => x != null && x.Exists && x.HasVehicleId() && (int)x.GetVehicleId() == vehId);
-                 if (vehicle == null) return;
-                 ServerVehicles.SetVehicleInGarage(vehicle, true, 25);
-                 HUDHandler.SendNotification(player, 4, 5000, $"Fahrzeug {vehId} in Garage 1(Pillbox) eingeparkt");
-             }
-             catch (Exception e)
-             {
-                 Alt.Log($"{e}");
-             }
-         }
-        */
+        [Command("parkvehicle")]
+        public static void CMD_parkVehicleById(IPlayer player, int vehId)
+        {
+            try
+            {
+                if (player == null || !player.Exists || player.AdminLevel() <= 8 || vehId <= 0) return;
+                if (!player.HasData("isAduty")) { HUDHandler.SendNotification(player, 4, 5000, "Nicht im (/am) Admindienst."); return; }
+                var vehicle = Alt.GetAllVehicles().ToList().FirstOrDefault(x => x != null && x.Exists && x.HasVehicleId() && (int)x.GetVehicleId() == vehId);
+                if (vehicle == null) return;
+                ServerVehicles.SetVehicleInGarage(vehicle, true, 25);
+                HUDHandler.SendNotification(player, 4, 5000, $"Fahrzeug {vehId} in Garage 1(Pillbox) eingeparkt");
+            }
+            catch (Exception e)
+            {
+                Alt.Log($"{e}");
+            }
+        }
+
         [Command("parkallvehicles")]
         public static void CMD_ParkALlVehs(IPlayer player)
         {
@@ -960,25 +964,24 @@ namespace Altv_Roleplay.Handler
             }
         }
 
-        /*        [Command("whitelist")]
-                public void WhitelistCMD(IPlayer player, int targetAccId)
-                {
-                    try
-                    {
-                        if (player == null || !player.Exists || targetAccId <= 0 || player.GetCharacterMetaId() <= 0) return;
-                        if (player.AdminLevel() <= 0) { HUDHandler.SendNotification(player, 4, 5000, "Keine Rechte."); return; }
-                        if (!User.ExistPlayerById(targetAccId)) { HUDHandler.SendNotification(player, 4, 5000, $"Diese ID existiert nicht {targetAccId}"); return; }
-                        if (User.IsPlayerWhitelisted(targetAccId)) { HUDHandler.SendNotification(player, 4, 5000, "Der Spieler ist bereits gewhitelisted."); return; }
-                        User.SetPlayerWhitelistState(targetAccId, true);
-                        HUDHandler.SendNotification(player, 4, 5000, $"Du hast den Spieler {targetAccId} gewhitelistet.");
-                    }
-                    catch (Exception e)
-                    {
-                        Alt.Log($"{e}");
-                    }
-                }
+        [Command("whitelist")]
+        public void WhitelistCMD(IPlayer player, int targetAccId)
+        {
+            try
+            {
+                if (player == null || !player.Exists || targetAccId <= 0 || player.GetCharacterMetaId() <= 0) return;
+                if (player.AdminLevel() <= 0) { HUDHandler.SendNotification(player, 4, 5000, "Keine Rechte."); return; }
+                if (!User.ExistPlayerById(targetAccId)) { HUDHandler.SendNotification(player, 4, 5000, $"Diese ID existiert nicht {targetAccId}"); return; }
+                if (User.IsPlayerWhitelisted(targetAccId)) { HUDHandler.SendNotification(player, 4, 5000, "Der Spieler ist bereits gewhitelisted."); return; }
+                User.SetPlayerWhitelistState(targetAccId, true);
+                HUDHandler.SendNotification(player, 4, 5000, $"Du hast den Spieler {targetAccId} gewhitelistet.");
+            }
+            catch (Exception e)
+            {
+                Alt.Log($"{e}");
+            }
+        }
 
-        */
         [Command("revive")]
         public void ReviveTargetCMD(IPlayer player, int targetId)
         {
@@ -1163,7 +1166,7 @@ namespace Altv_Roleplay.Handler
             else
             {
                 player.SetData("isAduty", true);
-                
+
                 int componentColor = 0;
 
                 /*
@@ -1177,18 +1180,17 @@ namespace Altv_Roleplay.Handler
                 7 dunkelgrau-gold
                 8 dunkelgrau-pastell-gelb
                 9 dunkelgrau-pink
-                
                 10 dunkelgrün
                 11 orange
                 12 lila
                 13 hell-pink
-                 */
+                */
 
                 switch (player.AdminLevel())
                 {
-					case 1: // Guide
-						componentColor = 0;
-						break;
+                    case 1: // Guide
+                        componentColor = 0;
+                        break;
                     case 2: // Support
                         componentColor = 10;
                         break;
@@ -1208,7 +1210,7 @@ namespace Altv_Roleplay.Handler
                         componentColor = 7;
                         break;
                     case 10: // PL
-                        componentColor = 2;
+                        componentColor = 7;
                         break;
                 }
 
@@ -1246,8 +1248,8 @@ namespace Altv_Roleplay.Handler
             }
         }
 
-       [Command("fveh")]
-       public static void Fveh(IPlayer player, string veh, int factionid, string  number)
+        [Command("fveh")]
+        public static void Fveh(IPlayer player, string veh, int factionid, string number)
         {
             if (player == null || !player.Exists) return;
             if (player.AdminLevel() < 2) { HUDHandler.SendNotification(player, 4, 5000, "Keine Rechte."); return; }
@@ -1257,6 +1259,7 @@ namespace Altv_Roleplay.Handler
             var fHash = Alt.Hash(veh);
             ServerVehicles.CreateVehicle(fHash, 1, 1, factionid, false, 86, player.Position, player.Rotation, platenumber, 255, 255, 255);
         }
+
         [Command("dim")]
         public void SetDimensionCmd(IPlayer player, int targetId, int dimension)
         {

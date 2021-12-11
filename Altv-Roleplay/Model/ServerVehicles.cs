@@ -89,7 +89,7 @@ namespace Altv_Roleplay.Model
 
         public static void SetVehicleNewOwner(int newOwner, string plate)
         {
-            int vehID = ServerVehicles.GetVehicleIdByPlate(plate);
+            int vehID = GetVehicleIdByPlate(plate);
             if (vehID == 0) return;
             var vehs = ServerVehicles_.FirstOrDefault(v => v.id == vehID);
             if (vehs != null)

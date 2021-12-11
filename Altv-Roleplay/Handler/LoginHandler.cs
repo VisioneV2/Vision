@@ -476,7 +476,7 @@ namespace Altv_Roleplay.Handler
             if (stopwatch.Elapsed.Milliseconds > 30) Alt.Log($"{charid} - CharacterSelectedSpawnPlace benötigte {stopwatch.Elapsed.Milliseconds}ms");
             await Task.Delay(5000);
             client.IsBlocked = false;
-            Model.ServerTattoos.GetAllTattoos(client);
+            ServerTattoos.GetAllTattoos(client);
         }
     }
 }

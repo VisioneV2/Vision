@@ -160,7 +160,7 @@ namespace Altv_Roleplay.Handler
                         return;
                     }
 
-                    if (player.Position.IsInRange(Handler.RobberyHandler.bankRobPosition, 2f))
+                    if (player.Position.IsInRange(RobberyHandler.bankRobPosition, 2f))
                     {
                         RobberyHandler.breakUpBank(player);
                         return;

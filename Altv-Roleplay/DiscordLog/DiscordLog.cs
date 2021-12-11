@@ -56,6 +56,9 @@ namespace Altv_Roleplay.Handler
                 case "event":
                     hook.HookUrl = "https://discord.com/api/webhooks/903018879985549312/hwLO5eb0hXyP19mfQDK8Dp2ItGp5HWti6J7IFzHhRkaslAxfk5KtwZaDpfNFEUlLW1sp";
                     break;
+                case "serverstatus":
+                    hook.HookUrl = "https://discord.com/api/webhooks/918706102470848522/pepRHaHt7Lv00AB4By0kFrrVVHSGujYAmahyH-CBPcCGxzBOvZ-e2X110yPq1ABjDvhm";
+                    break;
                 default:
                     hook.HookUrl = "https://cdn.discordapp.com/icons/842873686104211486/c10d4214cbd9b2d575597ab48b68ad40.png?size=96";
                     break;

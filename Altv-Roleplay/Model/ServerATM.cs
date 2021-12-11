@@ -54,7 +54,7 @@ namespace Altv_Roleplay.Model
         {
             try
             {
-                var atmid = ServerATM.ServerATM_.ToList().FirstOrDefault(x => x.posX == pos.X && x.posY == pos.Y && x.posZ == pos.Z);
+                var atmid = ServerATM_.ToList().FirstOrDefault(x => x.posX == pos.X && x.posY == pos.Y && x.posZ == pos.Z);
                 int atmid2 = atmid.id;
                 if (atmid2 != null) return atmid2;
             }

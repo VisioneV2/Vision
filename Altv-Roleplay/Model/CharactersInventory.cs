@@ -79,8 +79,8 @@ namespace Altv_Roleplay.Model
                 if (itemName == "Bargeld")
                 {
                     var tplayer = Alt.GetAllPlayers().ToList().FirstOrDefault(x => User.GetPlayerOnline(x) == charId);
-                    tplayer.Emit("Client:HUD:updateMoney", CharactersInventory.GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Bargeld", "inventory"));
-                    tplayer.Emit("Client:HUD:updateMoneyBlack", CharactersInventory.GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Schwarzgeld", "inventory"));
+                    tplayer.Emit("Client:HUD:updateMoney", GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Bargeld", "inventory"));
+                    tplayer.Emit("Client:HUD:updateMoneyBlack", GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Schwarzgeld", "inventory"));
                 }
             }
             catch (Exception e)
@@ -114,8 +114,8 @@ namespace Altv_Roleplay.Model
                 if (itemName == "Bargeld")
                 {
                     var tplayer = Alt.GetAllPlayers().ToList().FirstOrDefault(x => User.GetPlayerOnline(x) == charId);
-                    tplayer.Emit("Client:HUD:updateMoney", CharactersInventory.GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Bargeld", "inventory"));
-                    tplayer.Emit("Client:HUD:updateMoneyBlack", CharactersInventory.GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Schwarzgeld", "inventory"));
+                    tplayer.Emit("Client:HUD:updateMoney", GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Bargeld", "inventory"));
+                    tplayer.Emit("Client:HUD:updateMoneyBlack", GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Schwarzgeld", "inventory"));
                 }
             }
             catch (Exception _) { Alt.Log($"{_}"); }
@@ -146,8 +146,8 @@ namespace Altv_Roleplay.Model
                 if (itemName == "Bargeld")
                 {
                     var tplayer = Alt.GetAllPlayers().ToList().FirstOrDefault(x => User.GetPlayerOnline(x) == charId);
-                    tplayer.Emit("Client:HUD:updateMoney", CharactersInventory.GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Bargeld", "inventory"));
-                    tplayer.Emit("Client:HUD:updateMoneyBlack", CharactersInventory.GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Schwarzgeld", "inventory"));
+                    tplayer.Emit("Client:HUD:updateMoney", GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Bargeld", "inventory"));
+                    tplayer.Emit("Client:HUD:updateMoneyBlack", GetCharacterItemAmount(User.GetPlayerOnline(tplayer), "Schwarzgeld", "inventory"));
                 }
             }
             catch (Exception _) { Alt.Log($"{_}"); }

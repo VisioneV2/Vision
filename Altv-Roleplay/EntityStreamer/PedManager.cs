@@ -92,13 +92,13 @@ namespace Altv_Roleplay.EntityStreamer
 
         public void Delete()
         {
-            Ped.PedList.Remove(this);
+            PedList.Remove(this);
             AltEntitySync.RemoveEntity(this);
         }
 
         public void Destroy()
         {
-            Ped.PedList.Remove(this);
+            PedList.Remove(this);
             AltEntitySync.RemoveEntity(this);
         }
     }
