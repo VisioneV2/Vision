@@ -124,7 +124,13 @@ namespace Altv_Roleplay.Handler
                 interactHTML += "<li class='interactitem' id='InteractionMenu-showLicenses' data-action='showLicenses' data-actionstring='Lizenzen zeigen'><img src='../utils/img/Ausweis.png'></li>";
                 interactHTML += "<li class='interactitem' id='InteractionMenu-playerGiveTakeRopeCuffs' data-action='playerGiveTakeRopeCuffs' data-actionstring='Spieler fesseln/entfesseln'><img src='../utils/img/Seil.png'></li>";
                 interactHTML += "<li class='interactitem' id='InteractionMenu-playerStabilisieren' data-action='playerStabilisieren' data-actionstring='Spieler Stabilisieren'><img src='../utils/img/Seil.png'></li>";
-
+          
+                if (Characters.IsCharacterUnconscious((int)targetPlayer.GetCharacterMetaId()))
+               if (player.HasData("FFA")) { HUDHandler.SendNotification(player, 4, 6000, "Nicht in FFA "); return; } 
+                {
+                  
+                    interactHTML += "<li class='interactitem' id='InteractionMenu-playerRevive' data-action='playerRevive' data-actionstring='Spieler wiederbeleben'><img src='../utils/img/revive.png'></li>";
+                }
 
                 if (ServerFactions.GetCharacterFactionId(charId) == 1 || ServerFactions.GetCharacterFactionId(charId) == 3)
                 {
