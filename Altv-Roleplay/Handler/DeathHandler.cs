@@ -117,19 +117,16 @@ namespace Altv_Roleplay.Handler
                 if (player.HasData("Stabi"))
                 {
 
-                    if (player.Health == 100) return;
-                    
-                       
-                    
-                   
-                    await Task.Delay(900000);
+
+
+                 await Task.Delay(1000);
 
                     player.Spawn(new Position(355.54285f, -596.33405f, 28.75768f), 0);
                     player.Position = new Position(355.54285f, -596.33405f, 28.75768f);
                     Characters.SetCharacterUnconscious(charId, false, 0);
                     DeathHandler.closeDeathscreen(player);
                     player.Health = player.MaxHealth;
-                
+
                     player.DeleteData("Stabi");
                     return;
                 }
@@ -273,7 +270,28 @@ namespace Altv_Roleplay.Handler
                 Alt.Log($"{e}");
             }
         }
-		
+		internal static void Stabi(IPlayer player)
+        {
+            if (player == null || !player.Exists) return;
+          
+
+            if (player == null || !player.Exists) return;
+            int charId = (int)player.GetCharacterMetaId();
+            if (charId <= 0) return;
+            if (charId <= 0) return;
+            DeathHandler.closeDeathscreen(player);
+            player.Spawn(new Position(355.54285f, -596.33405f, 28.75768f), 0);
+                player.Position = new Position(355.54285f, -596.33405f, 28.75768f);
+                Characters.SetCharacterUnconscious(charId, false, 0);
+             //   DeathHandler.closeDeathscreen(player);
+                player.Health = player.MaxHealth;
+
+                player.DeleteData("Stabi");
+                return;
+            
+
+
+        }
         internal static void revive(IPlayer player)
         {
             try

@@ -33,6 +33,8 @@ namespace Altv_Roleplay.Handler
                 if (charId <= 0 || vehID <= 0) return;
                 var interactHTML = "";
                 interactHTML += "<li><p id='InteractionMenu-SelectedTitle'>Schließen</p></li><li class='interactitem' data-action='close' data-actionstring='Schließen'><img src='../utils/img/cancel.png'></li>";
+                
+                //niciht im vehicle 
                 if (type == "vehicleOut")
                 {
                     interactHTML += "<li class='interactitem' id='InteractionMenu-vehtoggleLock' data-action='vehtoggleLock' data-actionstring='Fahrzeug auf/abschließen'><img src='../utils/img/vehlock.png'></li>";
@@ -70,6 +72,8 @@ namespace Altv_Roleplay.Handler
                         }
                     }
                 }
+
+                //Is im fahrzeug
                 else if (type == "vehicleIn")
                 {
                     interactHTML += "<li class='interactitem' id='InteractionMenu-vehtoggleLock' data-action='vehtoggleLock' data-actionstring='Fahrzeug auf/abschließen'><img src='../utils/img/vehlock.png'></li>";
@@ -119,6 +123,8 @@ namespace Altv_Roleplay.Handler
                 interactHTML += "<li class='interactitem' id='InteractionMenu-showIdCard' data-action='showIdCard' data-actionstring='Ausweis zeigen'><img src='../utils/img/Ausweis.png'></li>";
                 interactHTML += "<li class='interactitem' id='InteractionMenu-showLicenses' data-action='showLicenses' data-actionstring='Lizenzen zeigen'><img src='../utils/img/Ausweis.png'></li>";
                 interactHTML += "<li class='interactitem' id='InteractionMenu-playerGiveTakeRopeCuffs' data-action='playerGiveTakeRopeCuffs' data-actionstring='Spieler fesseln/entfesseln'><img src='../utils/img/Seil.png'></li>";
+                interactHTML += "<li class='interactitem' id='InteractionMenu-playerStabilisieren' data-action='playerStabilisieren' data-actionstring='Spieler Stabilisieren'><img src='../utils/img/Seil.png'></li>";
+
 
                 if (ServerFactions.GetCharacterFactionId(charId) == 1 || ServerFactions.GetCharacterFactionId(charId) == 3)
                 {
@@ -148,6 +154,7 @@ namespace Altv_Roleplay.Handler
                     {
                         interactHTML += "<li class='interactitem' id='InteractionMenu-playerRevive' data-action='playerRevive' data-actionstring='Spieler wiederbeleben'><img src='../utils/img/revive.png'></li>";
                     }
+                   
 
                     if (ServerFactions.GetCharacterFactionId(charId) == 4 && targetPlayer.Health < 200)
                     {
@@ -162,7 +169,7 @@ namespace Altv_Roleplay.Handler
 
                 player.EmitLocked("Client:RaycastMenu:SetMenuItems", type, interactHTML);
                 stopwatch.Stop();
-                if (stopwatch.Elapsed.Milliseconds > 30) Alt.Log($"{charId} - GetMenuPlayerItems benötigte {stopwatch.Elapsed.Milliseconds}ms");
+                if (stopwatch.Elapsed.Milliseconds > 30) Alt.Log($"{charId} - GetMenuPlayerItems benötigte {stopwatch.Elapsed.Milliseconds} ms");
             }
             catch (Exception e)
             {
@@ -943,6 +950,26 @@ namespace Altv_Roleplay.Handler
             {
                 Alt.Log($"{e}");
             }
+        }
+        [AsyncClientEvent("Server:Raycast:SpielerStabilisieren")]
+        public async Task PlayerStabi(IPlayer player, IPlayer targetPlayer)
+        {
+            if (player == null || !player.Exists || targetPlayer == null || !targetPlayer.Exists) return;
+            int charId = User.GetPlayerOnline(player);
+            int targetCharId = User.GetPlayerOnline(targetPlayer);
+            if (charId <= 0 || targetCharId <= 0) return; 
+            int unconsciousTime = Characters.GetCharacterUnconsciousTime(charId);
+
+            if (!CharactersInventory.ExistCharacterItem(charId, "Verbandskasten", "inventory") && !CharactersInventory.ExistCharacterItem(charId, "Verbandskasten", "backpack")) { HUDHandler.SendNotification(player, 4, 3500, "Du hast keinen Verbandskasten dabei."); return; }
+            HUDHandler.SendNotification(targetPlayer, 3, 3000, "Jemand stabilisieren dich !");
+            HUDHandler.SendNotification(player, 3, 3000, "Du versuchst den Spieler zu stabilisieren");
+            InventoryHandler.InventoryAnimation(player, "revive", 10000);
+            Characters.SetCharacterUnconscious(charId, true, unconsciousTime + 5);
+            DeathHandler.Stabi(targetPlayer);
+            player.EmitLocked("SaltyChat:SetPlayerAlive", player, true);
+            if (CharactersInventory.ExistCharacterItem(charId, "Verbandskasten", "inventory")) { CharactersInventory.RemoveCharacterItemAmount(charId, "Verbandskasten", 1, "inventory"); return; }
+            else if (CharactersInventory.ExistCharacterItem(charId, "Verbandskasten", "backpack")) { CharactersInventory.RemoveCharacterItemAmount(charId, "Verbandskasten", 1, "backpack"); return; }
+
         }
 
         [AsyncClientEvent("Server:Raycast:showLicensesCard")]
