@@ -1384,7 +1384,7 @@ namespace Altv_Roleplay.Database
 
                             var ServerGarageBlipData = new Server_Blips
                             {
-                                name = $"{garageType}: {garage.name}",
+                                name = $"{garageType}",
                                 color = garageColor,
                                 scale = 0.5f,
                                 shortRange = true,
@@ -1416,6 +1416,9 @@ namespace Altv_Roleplay.Database
                 Alt.Log($"{e}");
             }
         }
+
+
+
 
         internal static void LoadAllGarageSlots()
         {
@@ -1796,33 +1799,6 @@ namespace Altv_Roleplay.Database
             }
         }
 
-        /*
-                public static void LoadAllServerUtilities()
-                {
-                    try
-                    {
-                        using (var db = new gtaContext())
-                        {
-                            ServerStorages.ServerStorages_ = new List<Server_Storages>(db.Server_Storages);
-                        }
-                        Alt.Log($"{ServerStorages.ServerStorages_.Count} Storages geladen..");
-
-                        foreach (Server_Storages storage in ServerStorages.ServerStorages_.ToList())
-                        {
-                            MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, new Vector3(storage.entryPos.X, storage.entryPos.Y, storage.entryPos.Z - 1), new Vector3(1), color: new Rgba(255, 51, 51, 100), streamRange: 50);
-                            HelpTextStreamer.Create("Drücke E um die Lagerhalle zu betreten und U um sie zu öffnen / schließen.", storage.entryPos, streamRange: 2);
-                            BlipStreamer.CreateStaticBlip("Lagerhalle", 0, 0.5f, true, 50, storage.entryPos, 0);
-                        }
-                        MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, new Vector3(Constants.Positions.storage_ExitPosition.X, Constants.Positions.storage_ExitPosition.Y, Constants.Positions.storage_ExitPosition.Z - 1), new Vector3(1), color: new Rgba(150, 0, 0, 100), streamRange: 15, dimension: -2147483648);
-                        MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, new Vector3(Constants.Positions.storage_InvPosition.X, Constants.Positions.storage_InvPosition.Y, Constants.Positions.storage_InvPosition.Z - 1), new Vector3(1), color: new Rgba(150, 0, 0, 100), streamRange: 15, dimension: -2147483648);
-
-
-
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"{e}");
-                    }
-                }*/
+        
     }
 }
