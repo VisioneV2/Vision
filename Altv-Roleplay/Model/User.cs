@@ -362,7 +362,7 @@ namespace Altv_Roleplay.Model
                     using (gtaContext db = new gtaContext())
                     {
                         db.Accounts.Update(pl);
-                        await db.SaveChangesAsync();
+                        db.SaveChanges();
                     }
                 }
                 catch (Exception e)
