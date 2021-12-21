@@ -75,6 +75,56 @@ namespace Altv_Roleplay.Model
 
         }
 
+        public static void CreateVehicle(ulong hash, int charid, int vehtype, int faction, bool isInGarage, int garageId, Position pos, Rotation rot, string plate, int primaryColor, int secondaryColor)
+        {
+            try
+            {
+                var nVehicle = new Server_Vehicles
+                {
+                    charid = charid,
+                    hash = hash,
+                    vehType = vehtype,
+                    faction = faction,
+                    fuel = GetVehicleFuelLimitOnHash(hash),
+                    KM = 0f,
+                    engineState = false,
+                    isEngineHealthy = true,
+                    lockState = true,
+                    isInGarage = isInGarage,
+                    garageId = garageId,
+                    posX = pos.X,
+                    posY = pos.Y,
+                    posZ = pos.Z,
+                    rotX = rot.Pitch,
+                    rotY = rot.Roll,
+                    rotZ = rot.Yaw,
+                    plate = plate,
+                    lastUsage = DateTime.Now,
+                    buyDate = DateTime.Now
+                };
+                ServerVehicles_.Add(nVehicle);
+
+                using (gtaContext db = new gtaContext())
+                {
+                    db.Server_Vehicles.Add(nVehicle);
+                    db.SaveChanges();
+                }
+
+                if (vehtype != 2) { AddVehicleModToList(nVehicle.id, nVehicle.id, primaryColor, secondaryColor, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 0, 0, 0, 0, 0); }
+                if (isInGarage) return;
+                ClassicVehicle veh = (ClassicVehicle)Alt.CreateVehicle((uint)hash, pos, rot);
+                veh.NumberplateText = plate;
+                veh.LockState = VehicleLockState.Locked;
+                veh.EngineOn = false;
+                veh.SetVehicleId((ulong)nVehicle.id);
+                veh.SetVehicleTrunkState(false);
+                if (vehtype != 2) { SetVehicleModsCorrectly(veh); }
+            }
+            catch (Exception e)
+            {
+                Alt.Log($"{e}");
+            }
+        }
 
         public static int GetVehicleFactionId2(int id)
         {

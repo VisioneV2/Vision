@@ -7,8 +7,10 @@ using Altv_Roleplay.Model;
 using Altv_Roleplay.models;
 using Altv_Roleplay.Utils;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Altv_Roleplay.Minijobs.Busfahrer
@@ -47,7 +49,7 @@ namespace Altv_Roleplay.Minijobs.Busfahrer
                 if (player.GetPlayerCurrentMinijobStep() != "DRIVE_BACK_TO_START") return;
                 if (!vehicle.Position.IsInRange(Constants.Positions.Minijob_Busdriver_VehOutPos, 8f)) return;
                 player.EmitLocked("Client:Minijob:RemoveJobMarker");
-                foreach (var veh in Alt.GetAllVehicles().Where(x => x.NumberplateText == $"BUS-{charId}").ToList())
+                foreach(var veh in Alt.GetAllVehicles().Where(x => x.NumberplateText == $"BUS-{charId}").ToList())
                 {
                     if (veh == null || !veh.Exists) continue;
                     ServerVehicles.RemoveVehiclePermanently(veh);
@@ -86,10 +88,10 @@ namespace Altv_Roleplay.Minijobs.Busfahrer
                 if (ServerVehicles.GetVehicleOwner(vehicle) != charId) return;
                 if (player.GetPlayerCurrentMinijob() != "Busfahrer") return;
                 if (player.GetPlayerCurrentMinijobStep() == "None") return;
-                if (player.GetPlayerCurrentMinijobStep() == "FirstStepInVehicle")
+                if(player.GetPlayerCurrentMinijobStep() == "FirstStepInVehicle")
                 {
                     var spot = Model.GetCharacterMinijobNextSpot(player);
-                    if (spot == null) return;
+                    if (spot == null) return; 
                     HUDHandler.SendNotification(player, 1, 25000, "Fahre zur ersten Haltestelle und warte dort 10 Sekunden.");
                     player.SetPlayerCurrentMinijobStep("DRIVE_TO_NEXT_STATION");
                     player.EmitLocked("Client:Minijob:CreateJobMarker", "Minijob: Haltestelle", 3, 80, 30, spot.posX, spot.posY, spot.posZ, false);
@@ -130,7 +132,7 @@ namespace Altv_Roleplay.Minijobs.Busfahrer
                     if (colShape != spot.destinationColshape) return;
                     client.EmitLocked("Client:Minijob:RemoveJobMarkerWithFreeze", 10000);
                     int maxSpots = Model.GetMinijobMaxRouteSpots((int)client.GetPlayerCurrentMinijobRouteId());
-                    if ((int)client.GetPlayerCurrentMinijobActionCount() < maxSpots)
+                    if((int)client.GetPlayerCurrentMinijobActionCount() < maxSpots)
                     {
                         //neuer Punkt
                         client.SetPlayerCurrentMinijobActionCount(client.GetPlayerCurrentMinijobActionCount() + 1);
@@ -142,7 +144,7 @@ namespace Altv_Roleplay.Minijobs.Busfahrer
                         Alt.Log($"Aktueller Spot || Route: {newSpot.routeId} || SpotID: {newSpot.spotId}");
                         return;
                     }
-                    else if ((int)client.GetPlayerCurrentMinijobActionCount() >= maxSpots)
+                    else if((int)client.GetPlayerCurrentMinijobActionCount() >= maxSpots)
                     {
                         //zurueck zum Depot
                         HUDHandler.SendNotification(client, 2, 10000, "An Haltestelle angekommen, warte 10 Sekunden und fahre den Bus anschließend zurück zum Depot und stelle ihn dort ab, wo du ihn bekommen hast.");
@@ -202,7 +204,7 @@ namespace Altv_Roleplay.Minijobs.Busfahrer
         }
 
         [AsyncClientEvent("Server:MinijobBusdriver:StartJob")]
-        public void StartMiniJob(IPlayer player, int routeId)
+        public async Task StartMiniJob(IPlayer player, int routeId)
         {
             try
             {
@@ -211,12 +213,13 @@ namespace Altv_Roleplay.Minijobs.Busfahrer
                 if (charId <= 0) return;
                 if (player.GetPlayerCurrentMinijob() != "None") return;
                 if (!Model.ExistRoute(routeId)) return;
-                if (CharactersMinijobs.GetCharacterMinijobEXP(charId, "Busfahrer") < Model.GetRouteNeededEXP(routeId)) { HUDHandler.SendNotification(player, 3, 5000, $"Du hast nicht die benötigen EXP für diese Linie ({Model.GetRouteNeededEXP(routeId)}EXP - du hast {CharactersMinijobs.GetCharacterMinijobEXP(charId, "Busfahrer")}EXP)."); return; }
+                if(CharactersMinijobs.GetCharacterMinijobEXP(charId, "Busfahrer") < Model.GetRouteNeededEXP(routeId)) { HUDHandler.SendNotification(player, 3, 5000, $"Du hast nicht die benötigen EXP für diese Linie ({Model.GetRouteNeededEXP(routeId)}EXP - du hast {CharactersMinijobs.GetCharacterMinijobEXP(charId, "Busfahrer")}EXP)."); return; }
                 foreach (var veh in Alt.GetAllVehicles().ToList())
                 {
                     if (veh == null || !veh.Exists) continue;
                     if (veh.Position.IsInRange(Constants.Positions.Minijob_Busdriver_VehOutPos, 8f)) { HUDHandler.SendNotification(player, 3, 5000, "Der Ausparkpunkt ist blockiert."); return; }
                 }
+                ServerVehicles.CreateVehicle(Model.GetRouteVehicleHash(routeId), charId, 2, 0, false, 0, Constants.Positions.Minijob_Busdriver_VehOutPos, Constants.Positions.Minijob_Busdriver_VehOutRot, $"BUS-{charId}", 132, 132);
                 player.SetPlayerCurrentMinijob("Busfahrer");
                 player.SetPlayerCurrentMinijobStep("FirstStepInVehicle");
                 player.SetPlayerCurrentMinijobRouteId((ulong)routeId);
